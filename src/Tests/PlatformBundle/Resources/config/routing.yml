@@ -1,3 +1,14 @@
 tests_platform_homepage:
     path:     /
     defaults: { _controller: TestsPlatformBundle:Default:index }
+
+hello_the_word:
+    path:     /hello-word
+    defaults:  { _controller: TestsPlatformBundle:Advert:index }
+azul_fellawen:
+    path:     /azul
+    defaults:  { _controller: TestsPlatformBundle:Advert:azul }
+# hello_the_word : est le nom de la route. Il sert juste a donner un nom
+# path : est l'url
+# default : pour spécifier les paramètres de la route. 
+# _controller : Bundle:Controller:Action
