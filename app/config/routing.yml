@@ -1,3 +1,9 @@
+# Spécifier au routeur quelles routes charger pour chaque bundle
+# resource : correspond au fichier qui contient toutes les routes liées au bundle spécifié
+tests_platform:
+    resource: "@TestsPlatformBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation

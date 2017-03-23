@@ -7,6 +7,7 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
+        // Liste des bundles à charger
         $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -16,8 +17,10 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
+            new Tests\PlatformBundle\TestsPlatformBundle(), // Pour le chargement du  bundle au lancement de l'application
         ];
 
+        // Pour les environnement de test et dev, on charge en plus ces bundles
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
