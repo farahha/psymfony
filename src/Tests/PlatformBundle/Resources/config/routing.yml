@@ -1,10 +1,38 @@
+# Fichier de mapping : route-controller-action
 # hello_the_word : est le nom de la route. Il sert juste a donner un nom
 # path : est l'url
 # default : pour spécifier les paramètres de la route.
 # _controller : Bundle:Controller:Action
-hello_the_word:
-    path:     /hello-word
-    defaults:  { _controller: TestsPlatformBundle:Advert:index }
+# "resource", "type", "prefix", "path", "host", "schemes", "methods", "defaults", "requirements", "options", "condition"
+tests_platform:
+    path:     /platform
+    defaults:
+        _controller: TestsPlatformBundle:Advert:index
+
+tests_platform_view_slug:
+    path:     /platfrom/advert/{_locale}/{year}/{slug}.{_format}
+    defaults:
+        _controller: TestsPlatformBundle:Advert:viewSlug
+        _format: html #valeur par défaut de format
+        _locale: fr
+    requirements:
+        year:  \d{4}
+        _format: html|xml|json
+        _locale: fr|en|de
+
+tests_platform_view:
+    path:     /platfrom/advert/{id}
+    defaults:
+        _controller: TestsPlatformBundle:Advert:view
+    requirements:
+        id:  \d+
+
+test_platform_add:
+    path:     /platform/add
+    defaults:
+        _controller: TestsPlatformBundle:Advert:add
+
 azul_fellawen:
     path:     /azul
-    defaults:  { _controller: TestsPlatformBundle:Advert:azul }
+    defaults:
+        _controller: TestsPlatformBundle:Advert:azul
