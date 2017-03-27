@@ -32,8 +32,7 @@ class AdvertController extends Controller
 
     public function viewAction($id)
     {
-		$url = $this->get('router')->generate('tests_platform'); // Url vers laquelle rederiger
-		return $this->redirect($url); // redirection
+		return $this->redirectToRoute('tests_platform'); // redirection
     }
 
     public function azulAction()
