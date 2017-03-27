@@ -6,13 +6,32 @@ namespace Tests\PlatformBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AdvertController extends Controller
 {
-    public function indexAction()
+    public function indexAction($page)
     {
-        return new Response("Notre propre Hello World !");
+        return new Response("Récupération de la page N° " . $page);
+    }
+
+    public function addAction()
+    {
+        return new Response("Ajouter ? Quoi ???? ... bon bah j'attends des données moi !");
+    }
+
+    public function editAction($id)
+    {
+        return new Response("Modifier ? Quoi ???? ... bah l'annonce dont l'id est : ". $id);
+    }
+
+    public function deleteAction($id)
+    {
+        return new Response("Supprimer ? Quoi ???? ... bah l'annonce dont l'id est : " . $id);
+    }
+
+    public function viewAction($id)
+    {
+        return new Response("L'id rentré est ". $id);
     }
 
     public function azulAction()
@@ -22,15 +41,5 @@ class AdvertController extends Controller
         // Récupération du contenu du template azul.html.twig
         $content = $templating->render('TestsPlatformBundle:Advert:azul.html.twig', ['ville' => "Vgayeth"]);
         return new Response($content);
-    }
-
-    public function viewAction($id)
-    {
-        return new Response("L'id rentrée est ". $id);
-    }
-
-    public function viewSlugAction($slug, $year, $_format, $_locale)
-    {
-        return new Response("On pourrait afficher l'annonce correspondant au slug ($_locale) '".$slug."', créée en ".$year." et au format ".$_format.".");
     }
 }

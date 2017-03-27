@@ -5,32 +5,38 @@
 # _controller : Bundle:Controller:Action
 # "resource", "type", "prefix", "path", "host", "schemes", "methods", "defaults", "requirements", "options", "condition"
 tests_platform:
-    path:     /platform
+    path:     /{page}
     defaults:
         _controller: TestsPlatformBundle:Advert:index
-
-tests_platform_view_slug:
-    path:     /platfrom/advert/{_locale}/{year}/{slug}.{_format}
-    defaults:
-        _controller: TestsPlatformBundle:Advert:viewSlug
-        _format: html #valeur par défaut de format
-        _locale: fr
+        page: 1
     requirements:
-        year:  \d{4}
-        _format: html|xml|json
-        _locale: fr|en|de
+        page: \d*
 
 tests_platform_view:
-    path:     /platfrom/advert/{id}
+    path:     /advert/{id}
     defaults:
         _controller: TestsPlatformBundle:Advert:view
     requirements:
         id:  \d+
 
-test_platform_add:
-    path:     /platform/add
+tests_platform_add:
+    path:     /add
     defaults:
         _controller: TestsPlatformBundle:Advert:add
+
+tests_platform_edit:
+    path:     /edit/{id}
+    defaults:
+        _controller: TestsPlatformBundle:Advert:edit
+    requirements:
+        id: \d+
+
+tests_platform_delete:
+    path:     /delete/{id}
+    defaults:
+        _controller: TestsPlatformBundle:Advert:delete
+    requirements:
+        id: \d+
 
 azul_fellawen:
     path:     /azul
