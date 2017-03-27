@@ -31,7 +31,10 @@ class AdvertController extends Controller
 
     public function viewAction($id)
     {
-        return new Response("L'id rentré est ". $id);
+        $response = new Response();
+        $response->setContent('Ceci est une page erreur 404');
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        return $response;
     }
 
     public function azulAction()
