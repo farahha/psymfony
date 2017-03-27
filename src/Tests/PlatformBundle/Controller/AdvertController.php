@@ -30,16 +30,10 @@ class AdvertController extends Controller
         return new Response("Supprimer ? Quoi ???? ... bah l'annonce dont l'id est : " . $id);
     }
 
-    public function viewAction($id, Request $request)
+    public function viewAction($id)
     {
-		$tag = $request->query->get('tag');
-		return $this->render(
-			'TestsPlatformBundle:Advert:view.html.twig',
-			array(
-				'id'  => $id,
-				'tag' => $tag,
-			)
-		);
+		$url = $this->get('router')->generate('tests_platform'); // Url vers laquelle rederiger
+		return $this->redirect($url); // redirection
     }
 
     public function azulAction()
