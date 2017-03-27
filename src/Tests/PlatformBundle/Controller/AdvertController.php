@@ -5,6 +5,7 @@
 namespace Tests\PlatformBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class AdvertController extends Controller
@@ -29,12 +30,16 @@ class AdvertController extends Controller
         return new Response("Supprimer ? Quoi ???? ... bah l'annonce dont l'id est : " . $id);
     }
 
-    public function viewAction($id)
+    public function viewAction($id, Request $request)
     {
-        $response = new Response();
-        $response->setContent('Ceci est une page erreur 404');
-        $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        return $response;
+		$tag = $request->query->get('tag');
+		return $this->render(
+			'TestsPlatformBundle:Advert:view.html.twig',
+			array(
+				'id'  => $id,
+				'tag' => $tag,
+			)
+		);
     }
 
     public function azulAction()
