@@ -3,7 +3,7 @@
 # path : est l'url
 # default : pour spécifier les paramètres de la route.
 # _controller : Bundle:Controller:Action
-# "resource", "type", "prefix", "path", "host", "schemes", "methods", "defaults", "requirements", "options", "condition"
+# "resource", "type", "prefix", "path", "host", "schemes", "methods", "defaults", "requirements", "options", "condition" sont les paramètres acceptés dans la définition de la route
 tests_platform:
     path:     /{page}
     defaults:
