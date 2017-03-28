@@ -7,17 +7,26 @@ namespace Tests\PlatformBundle\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AdvertController extends Controller
 {
     public function indexAction($page)
     {
-        return new Response("Récupération de la page N° " . $page);
+        if ($page < 1){
+            return new NotFoundHttpException('Page N° ' . $page . ' introuvable !');
+        }
+        // Appelle du template
+        return $this->render('TestsPlatformBundle:Advert:index.html.twig');
     }
 
-    public function addAction()
+    public function addAction(Request $request)
     {
-        return new Response("Ajouter ? Quoi ???? ... bon bah j'attends des données moi !");
+        if ($request->isMethod('POST')){
+            return $this->redirectToRoute('tests_platform_view', ['id' => 5]); // le 5 c'est juste pour le test
+        }
+
+        return $this->render('TestsPlatformBundle:Advert:add.html.twig');
     }
 
     public function editAction($id)
@@ -30,11 +39,8 @@ class AdvertController extends Controller
         return new Response("Supprimer ? Quoi ???? ... bah l'annonce dont l'id est : " . $id);
     }
 
-    public function viewAction($id, Request $request)
+    public function viewAction($id)
     {
-        $session = $request->getSession(); // Récupération de la session
-        $userId = $session->get('users_id');
-        $session->set('users_id', $id);
-        return new Response('test session : users_id en cours ' . $userId . ' sinon ... il faut aller voir dans les paramètres de la session et chercher le users_id pour voir la nouvelle valeur');
+        return $this->render('TestsPlatformBundle:Advert:view.html.twig', ['id' => $id]);
     }
 }
