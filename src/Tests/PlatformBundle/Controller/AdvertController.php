@@ -30,9 +30,12 @@ class AdvertController extends Controller
         return new Response("Supprimer ? Quoi ???? ... bah l'annonce dont l'id est : " . $id);
     }
 
-    public function viewAction($id)
+    public function viewAction($id, Request $request)
     {
-		return $this->redirectToRoute('tests_platform'); // redirection
+        $session = $request->getSession(); // Récupération de la session
+        $userId = $session->get('users_id');
+        $session->set('users_id', $id);
+        return new Response('test session : users_id en cours ' . $userId . ' sinon ... il faut aller voir dans les paramètres de la session et chercher le users_id pour voir la nouvelle valeur');
     }
 
     public function azulAction()
