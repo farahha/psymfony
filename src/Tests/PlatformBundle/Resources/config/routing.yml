@@ -37,8 +37,3 @@ tests_platform_delete:
         _controller: TestsPlatformBundle:Advert:delete
     requirements:
         id: \d+
-
-azul_fellawen:
-    path:     /azul
-    defaults:
-        _controller: TestsPlatformBundle:Advert:azul

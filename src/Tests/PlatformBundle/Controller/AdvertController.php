@@ -37,13 +37,4 @@ class AdvertController extends Controller
         $session->set('users_id', $id);
         return new Response('test session : users_id en cours ' . $userId . ' sinon ... il faut aller voir dans les paramètres de la session et chercher le users_id pour voir la nouvelle valeur');
     }
-
-    public function azulAction()
-    {
-        // Création d'un objet pour récuperer le contenu d'un template
-        $templating = $this->get('templating');
-        // Récupération du contenu du template azul.html.twig
-        $content = $templating->render('TestsPlatformBundle:Advert:azul.html.twig', ['ville' => "Vgayeth"]);
-        return new Response($content);
-    }
 }
