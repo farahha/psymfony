@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Index - Page {{ page }}</title>
-  </head>
-  <body>
-    <h3>Page {{ page }} !</h3>
-  </body>
-</html>
+{% extends "TestsPlatformBundle::layout.html.twig" %}
+
+{% block mon_bloc_titre %}{{ parent() }} - Index{% endblock %}
+
+{% block body %}
+  Notre plateforme est un peu vide pour le moment, mais cela viendra !
+{% endblock %}
