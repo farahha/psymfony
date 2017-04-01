@@ -17,3 +17,7 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    # Autre params
+    webmaster:      moi-même
+    webmaster_email: webmaster@me.com
