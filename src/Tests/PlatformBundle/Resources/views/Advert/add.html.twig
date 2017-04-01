@@ -1,8 +1,24 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Ajouter annonce</title>
-  </head>
-  <body>
-  </body>
-</html>
+{% extends "TestsPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Ajouter une annonce - {{ parent() }}
+{% endblock %}
+
+{% block testsplatform_body %}
+
+  <h3>Ajouter une annonce</h3>
+
+  {{ include("TestsPlatformBundle:Advert:form.html.twig") }}
+
+  <p>
+    Veuillez remplir le formulaire ci-dessous pour déposer votre annonce.
+  </p>
+
+  <p>
+    <a href="{{ path('tests_platform') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour
+    </a>
+  </p>
+
+{% endblock %}

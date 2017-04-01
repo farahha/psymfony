@@ -1,8 +1,25 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Modification annonce</title>
-  </head>
-  <body>
-  </body>
-</html>
+{% extends "TestsPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Modifier une annonce - {{ parent() }}
+{% endblock %}
+
+{% block testsplatform_body %}
+
+  <h3>Modifier une annonce</h3>
+
+  {{ include("TestsPlatformBundle:Advert:form.html.twig") }}
+
+  <p>
+    Vous éditez une annonce déjà existante, merci de ne pas changer
+    l'esprit général de l'annonce déjà publiée.
+  </p>
+
+  <p>
+    <a href="{{ path('tests_platform_view', {'id': advert.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à l'annonce
+    </a>
+  </p>
+
+{% endblock %}

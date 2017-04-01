@@ -1,7 +1,28 @@
+{# src/Tests/PlatformBundle/Resources/views/Advert/index.html.twig #}
+
 {% extends "TestsPlatformBundle::layout.html.twig" %}
 
-{% block mon_bloc_titre %}{{ parent() }} - Index{% endblock %}
+{% block title %}
+  Accueil - {{ parent() }}
+{% endblock %}
 
-{% block body %}
-  Notre plateforme est un peu vide pour le moment, mais cela viendra !
+{% block testsplatform_body %}
+
+  <h4>Liste des annonces (Template action)</h4>
+
+  <ul>
+    {% for advert in listAdverts %}
+      <li>
+        <a href="{{ path('tests_platform_view', {'id': advert.id}) }}">
+          {{ advert.title }}
+        </a>
+        par {{ advert.author }},
+        le {{ advert.date|date('d/m/Y') }}
+      </li>
+    {% else %}
+      <li>Pas d'annonces</li>
+      <li>Pas (encore !) d'annonces</li>
+    {% endfor %}
+  </ul>
+
 {% endblock %}
