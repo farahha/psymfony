@@ -53,7 +53,7 @@ class AdvertController extends Controller
         }
 
         $antispam= $this->container->get('tests_platform.antispam');
-        $txt = 'un deux 3 4';
+        $txt = 'un deux ...';
         if ($antispam->isSpam($txt))
         {
             throw new \Exception("Vous annonce a été détecté comme spam ...");
@@ -105,7 +105,7 @@ class AdvertController extends Controller
             'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
             'date'    => new \Datetime()
         );
-
+        $this->addFlash('info', "Les informations affichées sont en dur et ne proviennent pas d'une BDD");
         return $this->render('TestsPlatformBundle:Advert:view.html.twig', array(
             'advert' => $advert
         ));

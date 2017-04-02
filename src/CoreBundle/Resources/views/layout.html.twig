@@ -17,12 +17,12 @@
 <body>
   <div class="container">
     <div id="header" class="jumbotron">
-      <h3>Ma plateforme d'annonces</h3>
+      <h3>OpenClassroom Symfony</h3>
       <p>
         Mon projet tests (Template général)
       </p>
       <p>
-        <a class="btn btn-primary btn-lg" href="http://www.google.com">
+        <a class="btn btn-primary btn-lg" href="https://www.google.fr/search?q=symfony" target="_blank">
           Besoin d'aide ?
         </a>
       </p>
@@ -30,17 +30,21 @@
 
     <div class="row">
       <div id="menu" class="col-md-3">
-        <h3>Les annonces</h3>
+        <h3><a href="{{ path('core_homepage') }} ">Accueil</a></h3>
+
+        <h3><a href="{{ path('tests_platform') }} ">Les annonces</a></h3>
         <ul class="nav nav-pills nav-stacked">
-          <li><a href="{{ path('tests_platform') }}">Accueil</a></li>
+          <li><a href="{{ path('tests_platform') }}">Accueil annonces</a></li>
           <li><a href="{{ path('tests_platform_add') }}">Ajouter une annonce</a></li>
         </ul>
 
-        <h4>Dernières annonces</h4>
+        <h3> <a href="# ">Dernières annonces</a></h3>
         {{ render(controller("TestsPlatformBundle:Advert:menu", {'limit': 3})) }}
+        <h3><a href="{{ path('core_contact') }} ">Nous contacter</a></h3>
       </div>
       <div id="content" class="col-md-9">
         {% block body %}
+        {# Ici sera mis le contenu qu'on aimerait afficher dans le corp de la page #}
         {% endblock %}
       </div>
     </div>
@@ -48,7 +52,7 @@
     <hr>
 
     <footer>
-      <p>The sky's the limit © {{ 'now'|date('Y') }} and beyond.</p>
+      <p>ThnXX OpenClassroom {{ 'now'|date('Y') }} - {{ webmaster }} - <a href="mailto:{{ webmaster_email }}?Subject=Contact%20from%20Symfony%20tests" target="_top">{{ webmaster_email }}</a></p>
     </footer>
   </div>
 

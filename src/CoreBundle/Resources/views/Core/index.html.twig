@@ -1,0 +1,19 @@
+{# src/CoreBundle/Resources/views/index.html.twig #}
+
+{% extends "CoreBundle::layout.html.twig" %}
+
+{% block body %}
+    {% for message in app.session.flashbag.get('info') %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+    {% endfor %}
+    
+    <h4>Les 3 dernières annonces :</h4>
+    {% for advert in listAdverts %}
+    <fieldset><label><a href="{{ path('tests_platform_view', {'id': advert.id}) }}">{{ advert.title }}</a></label> par <label>{{ advert.author }}</label> le <label>{{ advert.date|date("d/m/Y") }}</label><br>
+        {{ advert.content }}
+    </fieldset>
+    {% endfor %}
+{% endblock %}
+
