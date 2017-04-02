@@ -4,6 +4,13 @@ parameters:
 #    parameter_name: value
 
 services:
+    tests_platform.antispam:
+        # class : namespace où se trouve la classe
+        class: Tests\PlatformBundle\AntiSpam\AntiSpam
+        arguments:
+            - "@mailer"
+            - %locale%
+            - 100
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

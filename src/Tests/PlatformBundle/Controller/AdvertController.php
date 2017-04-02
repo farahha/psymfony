@@ -52,6 +52,13 @@ class AdvertController extends Controller
             return $this->redirectToRoute('tests_platform_view', ['id' => 5]); // le 5 c'est juste pour le test
         }
 
+        $antispam= $this->container->get('tests_platform.antispam');
+        $txt = 'un deux 3 4';
+        if ($antispam->isSpam($txt))
+        {
+            throw new \Exception("Vous annonce a été détecté comme spam ...");
+        }
+
         return $this->render('TestsPlatformBundle:Advert:add.html.twig');
     }
 
