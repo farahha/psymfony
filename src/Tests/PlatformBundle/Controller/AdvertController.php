@@ -17,28 +17,9 @@ class AdvertController extends Controller
             throw new NotFoundHttpException('Page N° "' . $page . '" introuvable !');
         }
 
-        // Notre liste d'annonce en dur
+        $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
+        $listAdverts = $repository->findAll();
 
-        $listAdverts = array(
-            array(
-                'title'   => 'Recherche développpeur Symfony',
-                'id'      => 1,
-                'author'  => 'Alexandre',
-                'content' => 'Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…',
-                'date'    => new \Datetime()),
-            array(
-                'title'   => 'Mission de webmaster',
-                'id'      => 2,
-                'author'  => 'Hugo',
-                'content' => 'Nous recherchons un webmaster capable de maintenir notre site internet. Blabla…',
-                'date'    => new \Datetime()),
-            array(
-                'title'   => 'Offre de stage webdesigner',
-                'id'      => 3,
-                'author'  => 'Mathieu',
-                'content' => 'Nous proposons un poste pour webdesigner. Blabla…',
-                'date'    => new \Datetime())
-        );
         //return $this->render('TestsPlatformBundle:Advert:index.html.twig', ['page' => $page]);
         return $this->render('TestsPlatformBundle:Advert:index.html.twig', array(
                 'listAdverts' => $listAdverts
@@ -49,9 +30,9 @@ class AdvertController extends Controller
     {
         // création d'une entité Advert
         $advert = new Advert();
-        $advert->setTitle('Titre de mon annonce');
+        $advert->setTitle('Développeur Front End');
         $advert->setAuthor('KabyliXX');
-        $advert->setContent('Un contenu pour remplir le corps de mon annonce ... ça en fait trop là');
+        $advert->setContent('Nous recherchons pour notre entreprise spécialisée dans le développement un développeur Front End ayant une maitrise parfaite sur Node JS.');
         $advert->setDate(new \DateTime());
 
         // On va récupérer l'entité manager pour persister l'entité advert
@@ -85,22 +66,22 @@ class AdvertController extends Controller
 
     public function editAction($id, Request $request)
     {
+        if (empty($id)){
+            throw new NotFoundHttpException("Pas d'id de renseigné.");
+        }
+
+        $repository = $this->getDoctrine()->getRepository('Tests\PlatformBundle\Entity\Advert');
+
+        $advert = $repository->find($id);
+
         if ($request->isMethod('POST')){
             // Code pour traiter la requête ...
             $this->addFlash('Info', 'Annonce '.$id.' bien modifiée');
             return $this->redirectToRoute('tests_platform_view', ['id' => $id]);
         }
 
-        $advert = array(
-            'title'   => 'Recherche développpeur Symfony',
-            'id'      => $id,
-            'author'  => 'Alexandre',
-            'content' => 'Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…',
-            'date'    => new \Datetime()
-        );
-
         return $this->render('TestsPlatformBundle:Advert:edit.html.twig', array(
-                'advert' => $advert
+            'advert' => $advert
         ));
     }
 
@@ -121,7 +102,6 @@ class AdvertController extends Controller
     {
         // On récupère le repo de Advert Entity
         $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
-        $conn  = $this->getDoctrine()->getConnection('name')
 
         $advert = $repository->find($id);
 
