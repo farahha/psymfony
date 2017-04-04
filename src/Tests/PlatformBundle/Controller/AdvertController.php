@@ -7,6 +7,7 @@ namespace Tests\PlatformBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Tests\PlatformBundle\Entity\Advert;
 
 class AdvertController extends Controller
 {
@@ -46,20 +47,40 @@ class AdvertController extends Controller
 
     public function addAction(Request $request)
     {
+        // création d'une entité Advert
+        $advert = new Advert();
+        $advert->setTitle('Titre de mon annonce');
+        $advert->setAuthor('KabyliXX');
+        $advert->setContent('Un contenu pour remplir le corps de mon annonce ... ça en fait trop là');
+        $advert->setDate(new \DateTime());
+
+        // On va récupérer l'entité manager pour persister l'entité advert
+        $em = $this->getDoctrine()->getManager();
+
+        // 1 - Persister l'entité (<=> preparation de la requete)
+        // A noter aussi : Persist fonctionne comme une transaction dans laquelle on met differentes requetes a executer
+        $em->persist($advert);
+
+        // 2 - flusher tout ce qui a été persisté (<=> a l'execution des requetes preparées INSERT, UPDATE, DELETE ...)
+        // Le flush comme un commit, valide les requetes contenues dans le persist et si y a pas d'erreur c'est OK sinon rollback
+        $em->flush();
+
         if ($request->isMethod('POST')){
             // Code pour traiter la requête ...
             $this->addFlash('info', 'Annonce bien enregistrée');
             return $this->redirectToRoute('tests_platform_view', ['id' => 5]); // le 5 c'est juste pour le test
         }
-
+/*
         $antispam= $this->container->get('tests_platform.antispam');
         $txt = 'un deux ...';
         if ($antispam->isSpam($txt))
         {
             throw new \Exception("Vous annonce a été détecté comme spam ...");
         }
+*/
+        return $this->redirectToRoute('tests_platform_view', array('id' => $advert->getId()));
 
-        return $this->render('TestsPlatformBundle:Advert:add.html.twig');
+        //return $this->render('TestsPlatformBundle:Advert:add.html.twig');
     }
 
     public function editAction($id, Request $request)
@@ -98,14 +119,17 @@ class AdvertController extends Controller
 
     public function viewAction($id)
     {
-        $advert = array(
-            'title'   => 'Recherche développpeur Symfony2',
-            'id'      => $id,
-            'author'  => 'Alexandre',
-            'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
-            'date'    => new \Datetime()
-        );
-        $this->addFlash('info', "Les informations affichées sont en dur et ne proviennent pas d'une BDD");
+        // On récupère le repo de Advert Entity
+        $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
+        $conn  = $this->getDoctrine()->getConnection('name')
+
+        $advert = $repository->find($id);
+
+        if (null === $advert)
+        {
+            throw new NotFoundHttpException("L'id de l'annonce $id n'existe pas");
+        }
+
         return $this->render('TestsPlatformBundle:Advert:view.html.twig', array(
             'advert' => $advert
         ));
@@ -113,18 +137,13 @@ class AdvertController extends Controller
 
     public function menuAction($limit)
     {
-        // On fixe en dur une liste ici, bien entendu par la suite
-        // on la récupérera depuis la BDD !
-        $listAdverts = array(
-            array('id' => 2, 'title' => 'Recherche développeur Symfony'),
-            array('id' => 5, 'title' => 'Mission de webmaster'),
-            array('id' => 9, 'title' => 'Offre de stage webdesigner')
-        );
+        $repository = $this->getDoctrine()->getRepository('Tests\PlatformBundle\Entity\Advert');
+        $lastAdverts = $repository->findBy([], ['date' => 'desc'], 3, null);
 
         return $this->render('TestsPlatformBundle:Advert:menu.html.twig', array(
             // Tout l'intérêt est ici : le contrôleur passe
             // les variables nécessaires au template !
-            'listAdverts' => $listAdverts
+            'listAdverts' => $lastAdverts
         ));
     }
 
