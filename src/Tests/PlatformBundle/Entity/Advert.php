@@ -7,11 +7,19 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Advert
  *
- * @ORM\Table(name="advert")
+ * @ORM\Table(name="adverts")
  * @ORM\Entity(repositoryClass="Tests\PlatformBundle\Repository\AdvertRepository")
  */
 class Advert
 {
+    /**
+    *
+    * @ORM\OneToOne(targetEntity="Tests\PlatformBundle\Entity\Image", cascade={"persist"})
+    *
+    */
+    private $image;
+
+
     /**
      * @var int
      *
