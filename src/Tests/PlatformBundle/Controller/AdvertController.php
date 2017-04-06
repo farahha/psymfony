@@ -87,14 +87,18 @@ class AdvertController extends Controller
 
     public function deleteAction($id)
     {
+        if (empty($id)){
+            throw new NotFoundHttpException("Empty advert ID");
+        }
 
-        $advert = array(
-            'title'   => 'Recherche développpeur Symfony',
-            'id'      => $id,
-            'author'  => 'Alexandre',
-            'content' => 'Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…',
-            'date'    => new \Datetime()
-        );
+        $repository = $this->getDoctrine()->getRepository('Tests\PlatformBundle\Entity\Advert');
+
+        $advert = $repository->find($id);
+
+        if (null === $advert){
+            throw new NotFoundHttpException('Aucune annonce ne correspond à cet Id : '.$id);
+        }
+
         return $this->render('TestsPlatformBundle:Advert:delete.html.twig', ['advert' => $advert]);
     }
 
@@ -131,7 +135,7 @@ class AdvertController extends Controller
     protected function addFlash($type, $message)
     {
         if (!$this->container->has('session')) {
-            throw new \LogicException('Impossible d\'utiliser les messages flash, le contaner n\'a pas démarré sa session.');
+            throw new \LogicException('Impossible d\'utiliser les messages flash, le container n\'a pas démarré sa session.');
         }
 
         $this->container->get('session')->getFlashBag()->add($type, $message);

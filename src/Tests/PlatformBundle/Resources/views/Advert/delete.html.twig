@@ -10,7 +10,7 @@
 
   {{ include("TestsPlatformBundle:Advert:form.html.twig") }}
   {# Ici il faut créer un autre formulaire avec un bouton supprimer #}
-  <p>Vous êtes sur le point de supprimer l'annonce </p>{{ advert.title | upper }}
+  <p>Vous êtes sur le point de supprimer l'annonce : {{ advert.title }} </p>
   <p>
     <a href="{{ path('tests_platform_view', {'id': advert.id}) }}" class="btn btn-default">
       <i class="glyphicon glyphicon-chevron-left"></i>
