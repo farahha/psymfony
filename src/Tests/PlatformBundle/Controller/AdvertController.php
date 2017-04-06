@@ -34,7 +34,7 @@ class AdvertController extends Controller
         $advert->setTitle('Développeur Front End');
         $advert->setAuthor('KabyliXX');
         $advert->setContent('Nous recherchons pour notre entreprise spécialisée dans le développement un développeur Front End ayant une maitrise parfaite sur Node JS.');
-        $advert->setDate(new \DateTime());
+        //$advert->setDate(new \DateTime());
 
         // Création d'une image
         $image = new Image();
