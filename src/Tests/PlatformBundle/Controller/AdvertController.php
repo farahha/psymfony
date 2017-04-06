@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\PlatformBundle\Entity\Advert;
+use Tests\PlatformBundle\Entity\Image;
 
 class AdvertController extends Controller
 {
@@ -34,6 +35,14 @@ class AdvertController extends Controller
         $advert->setAuthor('KabyliXX');
         $advert->setContent('Nous recherchons pour notre entreprise spécialisée dans le développement un développeur Front End ayant une maitrise parfaite sur Node JS.');
         $advert->setDate(new \DateTime());
+
+        // Création d'une image
+        $image = new Image();
+        $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+        $image->setAlt("Je n'ai pas trouvé d'image");
+
+        // Setter la prepriété de l'annonce avec l'objet Image
+        $advert->setImage($image);
 
         // On va récupérer l'entité manager pour persister l'entité advert
         $em = $this->getDoctrine()->getManager();

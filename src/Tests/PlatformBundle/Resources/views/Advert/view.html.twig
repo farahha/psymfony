@@ -12,7 +12,13 @@
         </div>
     {% endfor %}
 
+
+    {% if advert.image is not null %}
+        <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" class="img-thumbnail" width="850" height="236">
+    {% endif %}
+
     <h2>{{ advert.title }}</h2>
+
     <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
 
     <div class="well">
