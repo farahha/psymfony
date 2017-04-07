@@ -83,6 +83,26 @@ class AdvertController extends Controller
 
         $advert = $repository->find($id);
 
+        if (null === $advert) {
+            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        // La méthode findAll retourne toutes les catégories de la base de données
+        $listCategories = $em->getRepository('Tests\PlatformBundle\Entity\Category')->findAll();
+
+        // On boucle sur les catégories pour les lier à l'annonce
+        foreach ($listCategories as $category) {
+            $advert->addCategory($category);
+        }
+
+        // Pour persister le changement dans la relation, il faut persister l'entité propriétaire
+        // Ici, Advert est le propriétaire, donc inutile de la persister car on l'a récupérée depuis Doctrine
+
+        // Étape 2 : On déclenche l'enregistrement
+        $em->flush();
+
         if ($request->isMethod('POST')){
             // Code pour traiter la requête ...
             $this->addFlash('Info', 'Annonce '.$id.' bien modifiée');
@@ -107,6 +127,16 @@ class AdvertController extends Controller
         if (null === $advert){
             throw new NotFoundHttpException('Aucune annonce ne correspond à cet Id : '.$id);
         }
+
+        $em = $this->getDoctrine()->getManager();
+
+        // On boucle sur les catégories de l'annonce pour les supprimer
+        foreach ($advert->getCategories() as $category) {
+            $advert->removeCategory($category);
+        }
+
+        // On déclenche la modification
+        $em->flush();
 
         return $this->render('TestsPlatformBundle:Advert:delete.html.twig', ['advert' => $advert]);
     }
