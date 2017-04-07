@@ -1,0 +1,53 @@
+<?php
+
+namespace Tests\PlatformBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * AdvertSkill
+ *
+ * @ORM\Table(name="advert_skill")
+ * @ORM\Entity(repositoryClass="Tests\PlatformBundle\Repository\AdvertSkillRepository")
+ */
+class AdvertSkill
+{
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tests\PlatformBundle\Entity\Advert")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $advert;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tests\PlatformBundle\Entity\Skill")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $skill;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(name="level", type="string", length=255)
+     */
+    private $level;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+
