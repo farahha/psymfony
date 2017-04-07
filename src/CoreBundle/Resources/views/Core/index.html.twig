@@ -10,10 +10,6 @@
     {% endfor %}
     
     <h4>Les 3 dernières annonces :</h4>
-    {% for advert in listAdverts %}
-    <fieldset><label><a href="{{ path('tests_platform_view', {'id': advert.id}) }}">{{ advert.title }}</a></label> par <label>{{ advert.author }}</label> le <label>{{ advert.date|date("d/m/Y") }}</label><br>
-        {{ advert.content }}
-    </fieldset>
-    {% endfor %}
+    {{ render(controller("TestsPlatformBundle:Advert:menu", {'limit': 3})) }}
 {% endblock %}
 
