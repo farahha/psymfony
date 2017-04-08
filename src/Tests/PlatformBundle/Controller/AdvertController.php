@@ -15,7 +15,7 @@ class AdvertController extends Controller
 {
     public function indexAction($page)
     {
-        if (empty($page) || $page < 1){
+        if (empty($page) || $page < 1) {
             throw new NotFoundHttpException('Page N° "' . $page . '" introuvable !');
         }
 
@@ -33,7 +33,7 @@ class AdvertController extends Controller
         // Juste pour remplir mes annonces
         $level = ['Junior', 'Confirmé', 'Expert'];
         $speciality = ['Back end PHP5 ZF2','Back end PHP5 SF3','Front end JS', 'Front end React'];
-        $title = $speciality[round(rand(0,3))];
+        $title = $speciality[round(rand(0, 3))];
 
         // création d'une entité Advert
         $advert = new Advert();
@@ -58,7 +58,7 @@ class AdvertController extends Controller
         // récupération de tous les skills
         $listSkills = $repository->findAll();
 
-        foreach ($listSkills as $skill){
+        foreach ($listSkills as $skill) {
             // Pour chaque skill, on crée une relation avec l'annonce
             $advertSkill = new AdvertSkill();
             // On lie la relation avec l'annonce
@@ -66,7 +66,7 @@ class AdvertController extends Controller
             // on lie la compétence avec l'annonce
             $advertSkill->setSkill($skill);
             // On lui attribue un niveau
-            $advertSkill->setLevel($level[round(rand(0,2))]); // Oui c'est pas joli :/
+            $advertSkill->setLevel($level[round(rand(0, 2))]); // Oui c'est pas joli :/
             // On persiste la relation
             $em->persist($advertSkill);
         }
@@ -79,7 +79,7 @@ class AdvertController extends Controller
         // Le flush comme un commit, valide les requetes contenues dans le persist et si y a pas d'erreur c'est OK sinon rollback
         $em->flush();
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             // Code pour traiter la requête ...
             $this->addFlash('info', 'Annonce bien enregistrée');
             return $this->redirectToRoute('tests_platform_view', ['id' => 5]); // le 5 c'est juste pour le test
@@ -99,7 +99,7 @@ class AdvertController extends Controller
 
     public function editAction($id, Request $request)
     {
-        if (empty($id)){
+        if (empty($id)) {
             throw new NotFoundHttpException("Pas d'id de renseigné.");
         }
 
@@ -127,7 +127,7 @@ class AdvertController extends Controller
         // Étape 2 : On déclenche l'enregistrement
         $em->flush();
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             // Code pour traiter la requête ...
             $this->addFlash('Info', 'Annonce '.$id.' bien modifiée');
             return $this->redirectToRoute('tests_platform_view', ['id' => $id]);
@@ -140,7 +140,7 @@ class AdvertController extends Controller
 
     public function deleteAction($id)
     {
-        if (empty($id)){
+        if (empty($id)) {
             throw new NotFoundHttpException("Empty advert ID");
         }
 
@@ -148,7 +148,7 @@ class AdvertController extends Controller
 
         $advert = $repository->find($id);
 
-        if (null === $advert){
+        if (null === $advert) {
             throw new NotFoundHttpException('Aucune annonce ne correspond à cet Id : '.$id);
         }
 
@@ -172,8 +172,7 @@ class AdvertController extends Controller
 
         $advert = $repository->find($id);
 
-        if (null === $advert)
-        {
+        if (null === $advert) {
             throw new NotFoundHttpException("L'id de l'annonce $id n'existe pas");
         }
 
