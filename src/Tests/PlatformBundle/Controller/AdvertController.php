@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\PlatformBundle\Entity\Advert;
 use Tests\PlatformBundle\Entity\Image;
+use Tests\PlatformBundle\Entity\AdvertSkill;
 
 class AdvertController extends Controller
 {
@@ -29,12 +30,16 @@ class AdvertController extends Controller
 
     public function addAction(Request $request)
     {
+        // Juste pour remplir mes annonces
+        $level = ['Junior', 'Confirmé', 'Expert'];
+        $speciality = ['Back end PHP5 ZF2','Back end PHP5 SF3','Front end JS', 'Front end React'];
+        $title = $speciality[round(rand(0,3))];
+
         // création d'une entité Advert
         $advert = new Advert();
-        $advert->setTitle('Développeur Front End');
+        $advert->setTitle($title);
         $advert->setAuthor('KabyliXX');
-        $advert->setContent('Nous recherchons pour notre entreprise spécialisée dans le développement un développeur Front End ayant une maitrise parfaite sur Node JS.');
-        //$advert->setDate(new \DateTime());
+        $advert->setContent('Nous recherchons pour notre entreprise spécialisée dans le développement un développeur '.$title);
 
         // Création d'une image
         $image = new Image();
@@ -46,6 +51,25 @@ class AdvertController extends Controller
 
         // On va récupérer l'entité manager pour persister l'entité advert
         $em = $this->getDoctrine()->getManager();
+
+        // Récupération du repo
+        $repository = $this->getDoctrine()->getRepository("Tests\PlatformBundle\Entity\Skill");
+
+        // récupération de tous les skills
+        $listSkills = $repository->findAll();
+
+        foreach ($listSkills as $skill){
+            // Pour chaque skill, on crée une relation avec l'annonce
+            $advertSkill = new AdvertSkill();
+            // On lie la relation avec l'annonce
+            $advertSkill->setAdvert($advert);
+            // on lie la compétence avec l'annonce
+            $advertSkill->setSkill($skill);
+            // On lui attribue un niveau
+            $advertSkill->setLevel($level[round(rand(0,2))]); // Oui c'est pas joli :/
+            // On persiste la relation
+            $em->persist($advertSkill);
+        }
 
         // 1 - Persister l'entité (<=> preparation de la requete)
         // A noter aussi : Persist fonctionne comme une transaction dans laquelle on met differentes requetes a executer
@@ -153,15 +177,23 @@ class AdvertController extends Controller
             throw new NotFoundHttpException("L'id de l'annonce $id n'existe pas");
         }
 
+        // On récupère la liste des candidatures
+        $applications = $this->getDoctrine()->getRepository("Tests\PlatformBundle\Entity\Application")->findBy(['advert' => $advert]);
+
+        // On récupère les compétences
+        $advertSkills = $this->getDoctrine()->getRepository("Tests\PlatformBundle\Entity\AdvertSkill")->findBy(['advert' => $advert]);
+
         return $this->render('TestsPlatformBundle:Advert:view.html.twig', array(
-            'advert' => $advert
+            'advert' => $advert,
+            'applications' => $applications,
+            'advertSkills' => $advertSkills,
         ));
     }
 
     public function menuAction($limit)
     {
         $repository = $this->getDoctrine()->getRepository('Tests\PlatformBundle\Entity\Advert');
-        $lastAdverts = $repository->findBy([], ['date' => 'desc'], 3, null);
+        $lastAdverts = $repository->findBy([], ['date' => 'desc'], $limit, null);
 
         return $this->render('TestsPlatformBundle:Advert:menu.html.twig', array(
             // Tout l'intérêt est ici : le contrôleur passe
