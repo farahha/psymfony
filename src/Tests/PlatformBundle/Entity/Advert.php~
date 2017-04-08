@@ -263,40 +263,4 @@ class Advert
     {
         return $this->categories;
     }
-
-    /**
-     * Add application
-     *
-     * @param \Tests\PlatformBundle\Entity\Application $application
-     *
-     * @return Advert
-     */
-    public function addApplication(\Tests\PlatformBundle\Entity\Application $application)
-    {
-        $this->applications[] = $application;
-
-        $application->setAdvert($advert); // Lier l'annonce a la candidature
-
-        return $this;
-    }
-
-    /**
-     * Remove application
-     *
-     * @param \Tests\PlatformBundle\Entity\Application $application
-     */
-    public function removeApplication(\Tests\PlatformBundle\Entity\Application $application)
-    {
-        $this->applications->removeElement($application);
-    }
-
-    /**
-     * Get applications
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getApplications()
-    {
-        return $this->applications;
-    }
 }
