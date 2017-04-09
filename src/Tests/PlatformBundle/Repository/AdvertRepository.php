@@ -10,4 +10,28 @@ namespace Tests\PlatformBundle\Repository;
  */
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function myFindAll(){
+
+        // le 'advert' peut être remplacé par n'importe quelle autre chaine de caractères, c'est juste un alias
+        // déjà, il est conseillé de mettre 'a' au lieu de 'advert', première lettre de l'entity
+        $queryBuilder = $this->_em->createQueryBuilder()
+        ->select('advert')
+        ->from($this->_entityName, 'advert');
+
+        // on peut aussi construire le queryBuilder comme ceci
+        // $queryBuilder = $this->createQueryBuilder('advert');
+
+        // on récupère la requete
+        $query = $queryBuilder->getQuery();
+
+        // On execute la requete pour recuperer le resultat
+        $result = $query->getResult();
+        // Ou bien
+        //$result = $query->execute(null, $query::HYDRATE_OBJECT);
+
+        return $result;
+
+        // En very short requete :)
+        // return $this->createQueryBuilder('advert')->getQuery()->getResult();
+    }
 }

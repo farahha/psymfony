@@ -168,7 +168,7 @@ class AdvertController extends Controller
     public function viewAction($id)
     {
         // On récupère le repo de Advert Entity
-        $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
+        $repository = $this->getDoctrine()->getManager()->getRepository('TestsPlatformBundle:Advert');
 
         $advert = $repository->find($id);
 
@@ -177,10 +177,10 @@ class AdvertController extends Controller
         }
 
         // On récupère la liste des candidatures
-        $applications = $this->getDoctrine()->getRepository("Tests\PlatformBundle\Entity\Application")->findBy(['advert' => $advert]);
+        $applications = $this->getDoctrine()->getRepository("TestsPlatformBundle:Application")->findBy(['advert' => $advert]);
 
         // On récupère les compétences
-        $advertSkills = $this->getDoctrine()->getRepository("Tests\PlatformBundle\Entity\AdvertSkill")->findBy(['advert' => $advert]);
+        $advertSkills = $this->getDoctrine()->getRepository("TestsPlatformBundle:AdvertSkill")->findBy(['advert' => $advert]);
 
         return $this->render('TestsPlatformBundle:Advert:view.html.twig', array(
             'advert' => $advert,
