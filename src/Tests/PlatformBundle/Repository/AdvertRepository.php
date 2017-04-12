@@ -2,6 +2,8 @@
 
 namespace Tests\PlatformBundle\Repository;
 
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * AdvertRepository
  *
@@ -33,5 +35,43 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
 
         // En very short requete :)
         // return $this->createQueryBuilder('advert')->getQuery()->getResult();
+    }
+
+    public function myFindOne($id){
+
+        $queryBuilder = $this->createQueryBuilder('advert');
+        $queryBuilder->where('advert.id = :id')
+        ->setParameter('id', (int) $id);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findByAuthorAndDate($author, $date){
+        $queryBuilder = $this->createQueryBuilder('a')
+        ->where('a.author = :author')
+        ->andWhere('a.date < :year');
+
+        $queryBuilder->setParameter('author', $author);
+        $queryBuilder->setParameter('date', $date);
+
+        $queryBuilder->orderBy('a.date', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function whereCurrentYear(QueryBuilder $qb){
+
+        $qb->andWhere('a.date BETWEEN :start AND :end')
+        ->setParameter('start', new \DateTime(date('Y').'-01-01'))
+        ->setParameter('end', new \DateTime(date('Y').'-12-31'));
+    }
+
+    public function myFind($author){
+
+        $queryBuilder = $this->createQueryBuilder('a');
+        $queryBuilder->where('a.author = :author')->setParameter('author', $author);
+        $this->whereCurrentYear($queryBuilder);
+        $queryBuilder->orderBy('a.date', 'DESC');
+        return $queryBuilder->getQuery()->getResult();
     }
 }
