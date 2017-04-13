@@ -12,7 +12,35 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function myFindAll(){
+    public function getAdvertWithApplications()
+    {
+        $queryBuilder = $this->createQueryBuilder('a')
+                        ->leftJoin('a.applications', 'app')
+                        ->addSelect('app')
+        ;
+        return $queryBuilder
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getAdvertWithCategories(array $categoryNames)
+    {
+        $queryBuilder = $this->createQueryBuilder('a')
+        ->innerJoin('a.categories', 'cat')
+        ->addSelect('cat')
+        ;
+
+        $queryBuilder->where($queryBuilder->expr()->in('c.name', $categoryNames));
+
+        return $queryBuilder
+                ->getQuery()
+                ->getResult()
+        ;
+    }
+
+    public function myFindAll()
+    {
 
         // le 'advert' peut être remplacé par n'importe quelle autre chaine de caractères, c'est juste un alias
         // déjà, il est conseillé de mettre 'a' au lieu de 'advert', première lettre de l'entity
@@ -44,6 +72,13 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         ->setParameter('id', (int) $id);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function myFindDQL($id)
+    {
+        $query = $this->_em->createQuery("SELECT a FROM TestsPlatfromBundle:Advert a WHERE id = :id");
+        $query->setParameter('id', (int) $id);
+        return $query->getSingleResult();
     }
 
     public function findByAuthorAndDate($author, $date){
