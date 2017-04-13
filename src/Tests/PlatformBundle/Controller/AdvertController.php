@@ -201,6 +201,11 @@ class AdvertController extends Controller
         ));
     }
 
+    public function testAction()
+    {
+
+    }
+
     // Fonction permettant de rajouter un message falsh
     protected function addFlash($type, $message)
     {
