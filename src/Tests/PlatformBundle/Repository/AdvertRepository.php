@@ -16,27 +16,24 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('a')
                         ->leftJoin('a.applications', 'app')
-                        ->addSelect('app')
-        ;
+                        ->addSelect('app');
+        
         return $queryBuilder
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     public function getAdvertWithCategories(array $categoryNames)
     {
         $queryBuilder = $this->createQueryBuilder('a')
-        ->innerJoin('a.categories', 'cat')
-        ->addSelect('cat')
-        ;
+            ->innerJoin('a.categories', 'cat')
+            ->addSelect('cat');
 
         $queryBuilder->where($queryBuilder->expr()->in('c.name', $categoryNames));
 
         return $queryBuilder
-                ->getQuery()
-                ->getResult()
-        ;
+            ->getQuery()
+            ->getResult();
     }
 
     public function myFindAll()
@@ -45,8 +42,8 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         // le 'advert' peut être remplacé par n'importe quelle autre chaine de caractères, c'est juste un alias
         // déjà, il est conseillé de mettre 'a' au lieu de 'advert', première lettre de l'entity
         $queryBuilder = $this->_em->createQueryBuilder()
-        ->select('advert')
-        ->from($this->_entityName, 'advert');
+            ->select('advert')
+            ->from($this->_entityName, 'advert');
 
         // on peut aussi construire le queryBuilder comme ceci
         // $queryBuilder = $this->createQueryBuilder('advert');
@@ -65,8 +62,8 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         // return $this->createQueryBuilder('advert')->getQuery()->getResult();
     }
 
-    public function myFindOne($id){
-
+    public function myFindOne($id)
+    {
         $queryBuilder = $this->createQueryBuilder('advert');
         $queryBuilder->where('advert.id = :id')
         ->setParameter('id', (int) $id);
@@ -81,10 +78,11 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         return $query->getSingleResult();
     }
 
-    public function findByAuthorAndDate($author, $date){
+    public function findByAuthorAndDate($author, $date)
+    {
         $queryBuilder = $this->createQueryBuilder('a')
-        ->where('a.author = :author')
-        ->andWhere('a.date < :year');
+                        ->where('a.author = :author')
+                        ->andWhere('a.date < :year');
 
         $queryBuilder->setParameter('author', $author);
         $queryBuilder->setParameter('date', $date);
@@ -94,15 +92,15 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function whereCurrentYear(QueryBuilder $qb){
-
+    public function whereCurrentYear(QueryBuilder $qb)
+    {
         $qb->andWhere('a.date BETWEEN :start AND :end')
         ->setParameter('start', new \DateTime(date('Y').'-01-01'))
         ->setParameter('end', new \DateTime(date('Y').'-12-31'));
     }
 
-    public function myFind($author){
-
+    public function myFind($author)
+    {
         $queryBuilder = $this->createQueryBuilder('a');
         $queryBuilder->where('a.author = :author')->setParameter('author', $author);
         $this->whereCurrentYear($queryBuilder);
