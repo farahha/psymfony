@@ -24,6 +24,11 @@ tests_platform_add:
     defaults:
         _controller: TestsPlatformBundle:Advert:add
 
+tests_platform_test:
+    path:     /test
+    defaults:
+        _controller: TestsPlatformBundle:Advert:test
+
 tests_platform_edit:
     path:     /edit/{id}
     defaults:

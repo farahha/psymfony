@@ -203,6 +203,9 @@ class AdvertController extends Controller
 
     public function testAction()
     {
+        $repository = $this->getDoctrine()->getManager()->getRepository('TestsPlatformBundle:Advert');
+        $listAdverts = $repository->myFindAll();
+        return $this->render('TestsPlatformBundle:Advert:index.html.twig', ['listAdverts' => $listAdverts]);
     }
 
     // Fonction permettant de rajouter un message falsh
