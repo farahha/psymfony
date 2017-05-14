@@ -8,20 +8,22 @@
 
 {% block testsplatform_body %}
 
-  <h4>Liste des annonces (Template action)</h4>
-
-  <ul>
-    {% for advert in listAdverts %}
-      <li>
-        <a href="{{ path('tests_platform_view', {'id': advert.id}) }}">
-          {{ advert.title }}
-        </a>
-        par {{ advert.author }},
-        le {{ advert.date|date('d/m/Y') }}
-      </li>
-    {% else %}
-      <li>Pas d'annonces</li>
-    {% endfor %}
-  </ul>
+<h4>Liste des annonces (Template action)</h4>
+{% if nbAdverts != 0 %}
+<p>Vous avez <b>{{ nbAdverts }}</b> annonces, dont les dernières sont : </p>
+{% endif %}
+<ul>
+{% for advert in listAdverts %}
+    <li>
+    <a href="{{ path('tests_platform_view', {'id': advert.id}) }}">
+      {{ advert.title }}
+    </a>
+    par {{ advert.author }},
+    le {{ advert.date|date('d/m/Y') }}
+    </li>
+{% else %}
+    <li>Pas d'annonces</li>
+{% endfor %}
+</ul>
 
 {% endblock %}

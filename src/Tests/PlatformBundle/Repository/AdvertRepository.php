@@ -17,10 +17,24 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         $queryBuilder = $this->createQueryBuilder('a')
                         ->leftJoin('a.applications', 'app')
                         ->addSelect('app');
-        
+
         return $queryBuilder
             ->getQuery()
             ->getResult();
+    }
+
+    public function getArrayAdverts()
+    {
+        $qb = $this->createQueryBuilder('advert');
+
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    public function getNbAdverts()
+    {
+        $qb = $this->createQueryBuilder('advert')->select('count(advert)');
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     public function getAdvertWithCategories(array $categoryNames)

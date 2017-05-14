@@ -20,11 +20,12 @@ class AdvertController extends Controller
         }
 
         $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
-        $listAdverts = $repository->findAll();
-
+        $listAdverts = $repository->getArrayAdverts(); // Plus rapide que findAll() mais ne prend pas en compte les modifications
+        $nbAdverts = $repository->getNbAdverts();
         //return $this->render('TestsPlatformBundle:Advert:index.html.twig', ['page' => $page]);
         return $this->render('TestsPlatformBundle:Advert:index.html.twig', array(
-                'listAdverts' => $listAdverts
+                'listAdverts' => $listAdverts,
+                'nbAdverts' => (int) $nbAdverts,
         ));
     }
 
@@ -37,6 +38,7 @@ class AdvertController extends Controller
             'http://www.business-agility.com/wp-content/uploads/2014/07/850x236-implementation.jpg',
             'http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg',
             'http://www.business-agility.com/wp-content/uploads/2014/07/850x236-events.jpg',
+            'http://www.karmatechnologies.asia/wp-content/uploads/2015/11/Web-Applications.jpg',
         ];
 
         $title = $speciality[round(rand(0, 3))];
