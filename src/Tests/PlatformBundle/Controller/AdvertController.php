@@ -33,6 +33,12 @@ class AdvertController extends Controller
         // Juste pour remplir mes annonces
         $level = ['Junior', 'Confirmé', 'Expert'];
         $speciality = ['Back end PHP5 ZF2','Back end PHP5 SF3','Front end JS', 'Front end React'];
+        $urls = [
+            'http://www.business-agility.com/wp-content/uploads/2014/07/850x236-implementation.jpg',
+            'http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg',
+            'http://www.business-agility.com/wp-content/uploads/2014/07/850x236-events.jpg',
+        ];
+
         $title = $speciality[round(rand(0, 3))];
 
         // création d'une entité Advert
@@ -43,7 +49,7 @@ class AdvertController extends Controller
 
         // Création d'une image
         $image = new Image();
-        $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+        $image->setUrl($urls[round(rand(0, 3))]);
         $image->setAlt("Je n'ai pas trouvé d'image");
 
         // Setter la prepriété de l'annonce avec l'objet Image
