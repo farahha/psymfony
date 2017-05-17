@@ -14,3 +14,8 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+    tests_platform.email.application_mailer
+        class: Tests\PlatformBundle\Email\ApplicationMailer
+        arguments:
+            - "@mailer"
