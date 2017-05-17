@@ -20,13 +20,16 @@
     </a>
     par {{ advert.author }},
     le {{ advert.date|date('d/m/Y') }}
+    {% if advert.updated != null %}
+    - modifiée le {{ advert.updated|date('d/m/Y') }}
+    {% endif %}
     </li>
 {% else %}
     <li>Pas d'annonces</li>
 {% endfor %}
 </ul>
 
-{% if test != null %}
+{% if test is defined and test != null %}
 {{ dump(test) }}
 {% endif %}
 
