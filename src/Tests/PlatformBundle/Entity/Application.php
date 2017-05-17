@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="applications")
  * @ORM\Entity(repositoryClass="Tests\PlatformBundle\Repository\ApplicationRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Application
 {
@@ -158,5 +159,23 @@ class Application
     public function getAdvert()
     {
         return $this->advert;
+    }
+
+    /**
+     * Permet de mettre à jour le nbApplications de l'Advert lorsqu'une nouvelle candidature (Application) est persistée en BDD
+     * @ORM\PrePersist
+     */
+    public function increase()
+    {
+        $this->advert->increaseNbApplications();
+    }
+
+    /**
+     * Permet de mettre à jour le nbApplications de l'Advert lorsqu'une nouvelle candidature (Application) est supprimée de BDD
+     * @ORM\PreRemove
+     */
+    public function decrease()
+    {
+        $this->advert->decreaseNbApplications();
     }
 }

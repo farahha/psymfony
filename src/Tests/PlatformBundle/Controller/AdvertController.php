@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\PlatformBundle\Entity\Advert;
 use Tests\PlatformBundle\Entity\Image;
 use Tests\PlatformBundle\Entity\AdvertSkill;
+use Tests\PlatformBundle\Entity\Application;
 
 class AdvertController extends Controller
 {
@@ -212,17 +213,29 @@ class AdvertController extends Controller
     public function testAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $rAdv = $em->getRepository('TestsPlatformBundle:Advert');
+        $rApp = $em->getRepository('TestsPlatformBundle:Application');
 
-        $repository = $em->getRepository('TestsPlatformBundle:Advert');
-        $advert1 = $repository->find(3);
-        $advert1->setAuthor('Nap');
+        $advert1 = $rAdv->findOneBy(['author' => 'kabyliXX']);
+        //$advert1->setAuthor('Nap');
+
+        $application = new Application();
+        $application->setAdvert($advert1);
+        $application->setAuthor('YYYYYY');
+        $application->setContent('Bonjour, Je suis intéressé par le poste que vous proposez.');
+        $application->setDate(new \DateTime());
+
+
         $em->persist($advert1);
+        $em->persist($application);
+
         $em->flush();
 
-        $listAdverts = $repository->myFindAll();
-        return $this->render('TestsPlatformBundle:Advert:index.html.twig', ['listAdverts' => $listAdverts,
-                                                                            'test' => $advert1,
-                                                                            'nbAdverts' => count($listAdverts),
+        $listAdverts = $rAdv->myFindAll();
+        return $this->render('TestsPlatformBundle:Advert:index.html.twig', [
+            'listAdverts' => $listAdverts,
+            'nbAdverts' => count($listAdverts),
+            'test' => [$advert1,$application],
         ]);
     }
 

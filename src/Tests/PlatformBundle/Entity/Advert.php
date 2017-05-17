@@ -68,10 +68,16 @@ class Advert
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated", type="datetime", nullable=false)
+     * @ORM\Column(name="updated", type="datetime", nullable=true)
      */
     private $updated;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nb_applications", type="integer")
+     */
+    private $nbApplications = 0;
 
     /**
      *
@@ -335,10 +341,21 @@ class Advert
     }
 
     /**
+     * Permet de mettre à jour l'attribut updated avec la date de la dernière mise à jour de l'advert
      * @ORM\PreUpdate
      */
     public function updateDate()
     {
         $this->setUpdated(new \DateTime());
+    }
+
+    public function increaseNbApplications()
+    {
+        $this->nbApplications++;
+    }
+
+    public function decreaseNbApplications()
+    {
+        $this->nbApplications--;
     }
 }
