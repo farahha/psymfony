@@ -34,5 +34,7 @@ monolog:
 twig:
     debug: true
 
-#swiftmailer:
-#    delivery_addresses: ['me@example.com']
+swiftmailer:
+    transport: gmail
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
