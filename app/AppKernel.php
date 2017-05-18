@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Tests\PlatformBundle\TestsPlatformBundle(), // Pour le chargement du  bundle au lancement de l'application,
             new CoreBundle\CoreBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         ];
 
         // Pour les environnement de test et dev, on charge en plus ces bundles
