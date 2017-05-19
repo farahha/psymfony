@@ -14,12 +14,16 @@ class AdvertSkill
 {
 
     /**
+     * @var Advert
+     *
      * @ORM\ManyToOne(targetEntity="Tests\PlatformBundle\Entity\Advert")
      * @ORM\JoinColumn(nullable=false)
      */
     private $advert;
 
     /**
+     * @var Skill
+     *
      * @ORM\ManyToOne(targetEntity="Tests\PlatformBundle\Entity\Skill")
      * @ORM\JoinColumn(nullable=false)
      */

@@ -4,6 +4,7 @@ namespace Tests\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Advert
@@ -100,6 +101,8 @@ class Advert
     public function __construct()
     {
         $this->date = new \DateTime();
+        $this->categories = new ArrayCollection();
+        $this->applications = new ArrayCollection();
     }
 
     /**
