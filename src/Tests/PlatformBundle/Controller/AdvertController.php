@@ -14,6 +14,25 @@ use Tests\PlatformBundle\Entity\Application;
 
 class AdvertController extends Controller
 {
+    protected $sets = [
+        'index' => [
+            '__embedded' => [
+                'applications' => [
+                    'fields' => [], // je ne sais pas encore comment je peux limiter la récupération sur certains champs uniquement :/
+                ],
+                'skills' => [
+                    'fields' => [],
+                ],
+                'categories' => [
+                    'fields' => [],
+                ],
+                'image' => [
+                    'fields' => [],
+                ],
+            ],
+        ],
+    ];
+
     public function indexAction($page)
     {
         if (empty($page) || $page < 1) {
@@ -21,7 +40,8 @@ class AdvertController extends Controller
         }
 
         $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
-        $listAdverts = $repository->getArrayAdverts(); // Plus rapide que findAll() mais ne prend pas en compte les modifications
+        $listAdverts = $repository->getArrayAdverts($this->sets['index']); // Plus rapide que findAll() mais ne prend pas en compte les modifications et ce n'est pas grave puisqu'on fait que afficher
+        dump($listAdverts);
         $nbAdverts = $repository->getNbAdverts(); // Juste pour le test, car je peux faire count($listAdverts) directement
         return $this->render('TestsPlatformBundle:Advert:index.html.twig', array(
             'listAdverts' => $listAdverts,

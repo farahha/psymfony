@@ -3,6 +3,7 @@
 namespace Tests\PlatformBundle\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+use Tests\PlatformBundle\Entity\Advert;
 
 /**
  * AdvertRepository
@@ -12,24 +13,97 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getAdvertWithApplications()
-    {
-        $queryBuilder = $this->createQueryBuilder('a')
-                        ->leftJoin('a.applications', 'app')
-                        ->addSelect('app');
 
-        return $queryBuilder
-            ->getQuery()
-            ->getResult();
+    /**
+     * Récupère toutes les annonces par date la plus recente
+     * @return Array of Advert (Object)
+     */
+    public function getAdverts($sets = null)
+    {
+        $qb = $this->createQueryBuilder('advert')
+            ->orderBy('advert.date', 'DESC');
+
+        if (empty($sets)) {
+            $qb->leftJoin('advert.applications', 'app')
+                    ->addSelect('app')
+                    ->leftJoin('advert.image', 'img')
+                    ->addSelect('img')
+                    ->leftJoin('advert.categories', 'cat')
+                    ->addSelect('cat')
+                    ->leftJoin('advert.skills', 'skill')
+                    ->addSelect('skill');
+        } else {
+            if (!empty($sets['__embedded']['applications'])) {
+                $qb->leftJoin('advert.applications', 'app')
+                    ->addSelect('app');
+            }
+
+            if (!empty($sets['__embedded']['skills'])) {
+                $qb->leftJoin('advert.skills', 'skill')
+                    ->addSelect('skill');
+            }
+
+            if (!empty($sets['__embedded']['image'])) {
+                $qb->leftJoin('advert.image', 'img')
+                    ->addSelect('img');
+            }
+
+            if (!empty($sets['__embedded']['categories'])) {
+                $qb->leftJoin('advert.categories', 'cat')
+                    ->addSelect('cat');
+            }
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
-    public function getArrayAdverts()
+    /**
+     * Récupère toutes les annonces
+     * @return Array of Advert (Array)
+     */
+    public function getArrayAdverts($sets = null)
     {
-        $qb = $this->createQueryBuilder('advert');
+        $qb = $this->createQueryBuilder('advert')
+        ->orderBy('advert.date', 'DESC');
+
+        if (empty($sets)) {
+            $qb->leftJoin('advert.applications', 'app')
+            ->addSelect('app')
+            ->leftJoin('advert.image', 'img')
+            ->addSelect('img')
+            ->leftJoin('advert.categories', 'cat')
+            ->addSelect('cat')
+            ->leftJoin('advert.skills', 'skill')
+            ->addSelect('skill');
+        } else {
+            if (!empty($sets['__embedded']['applications'])) {
+                $qb->leftJoin('advert.applications', 'app')
+                ->addSelect('app');
+            }
+
+            if (!empty($sets['__embedded']['skills'])) {
+                $qb->leftJoin('advert.skills', 'skill')
+                ->addSelect('skill');
+            }
+
+            if (!empty($sets['__embedded']['image'])) {
+                $qb->leftJoin('advert.image', 'img')
+                ->addSelect('img');
+            }
+
+            if (!empty($sets['__embedded']['categories'])) {
+                $qb->leftJoin('advert.categories', 'cat')
+                ->addSelect('cat');
+            }
+        }
 
         return $qb->getQuery()->getArrayResult();
     }
 
+    /**
+     * Retourne le nombre d'Advert qu'il y a en BDD
+     * @return mixed|\Doctrine\DBAL\Driver\Statement|NULL
+     */
     public function getNbAdverts()
     {
         $qb = $this->createQueryBuilder('advert')->select('count(advert)');
@@ -37,6 +111,11 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * Retourne l'ensemble des annonces (Advert) qui sont dans l'une des catégories de $categoryNames
+     * @param array $categoryNames
+     * @return array Advert (Object)
+     */
     public function getAdvertWithCategories(array $categoryNames)
     {
         $queryBuilder = $this->createQueryBuilder('a')
