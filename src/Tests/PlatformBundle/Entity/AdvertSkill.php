@@ -16,7 +16,7 @@ class AdvertSkill
     /**
      * @var Advert
      *
-     * @ORM\ManyToOne(targetEntity="Tests\PlatformBundle\Entity\Advert")
+     * @ORM\ManyToOne(targetEntity="Tests\PlatformBundle\Entity\Advert", inversedBy="skills")
      * @ORM\JoinColumn(nullable=false)
      */
     private $advert;

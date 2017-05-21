@@ -31,6 +31,11 @@ class Advert
     private $applications;
 
     /**
+     * @ORM\OneToMany(targetEntity="Tests\PlatformBundle\Entity\AdvertSkill", mappedBy="advert")
+     */
+    private $skills;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -418,5 +423,39 @@ class Advert
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Add skill
+     *
+     * @param \Tests\PlatformBundle\Entity\AdvertSkill $skill
+     *
+     * @return Advert
+     */
+    public function addSkill(\Tests\PlatformBundle\Entity\AdvertSkill $skill)
+    {
+        $this->skills[] = $skill;
+
+        return $this;
+    }
+
+    /**
+     * Remove skill
+     *
+     * @param \Tests\PlatformBundle\Entity\AdvertSkill $skill
+     */
+    public function removeSkill(\Tests\PlatformBundle\Entity\AdvertSkill $skill)
+    {
+        $this->skills->removeElement($skill);
+    }
+
+    /**
+     * Get skills
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSkills()
+    {
+        return $this->skills;
     }
 }
