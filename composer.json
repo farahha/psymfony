@@ -31,8 +31,8 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "twig/twig": "^1.0||^2.0",
         "fabpot/php-cs-fixer": "~2.2",
-        "stof/doctrine-extensions-bundle": "^1.2.2"
-        
+        "stof/doctrine-extensions-bundle": "^1.2.2",
+        "symfony/var-dumper": "*"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
