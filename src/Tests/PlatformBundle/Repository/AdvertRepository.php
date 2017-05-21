@@ -4,6 +4,7 @@ namespace Tests\PlatformBundle\Repository;
 
 use Doctrine\ORM\QueryBuilder;
 use Tests\PlatformBundle\Entity\Advert;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * AdvertRepository
@@ -18,7 +19,7 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
      * Récupère toutes les annonces par date la plus recente
      * @return Array of Advert (Object)
      */
-    public function getAdverts($sets = null)
+    public function getAdverts($page, $nbAdvertPerPage, $sets = null)
     {
         $qb = $this->createQueryBuilder('advert')
             ->orderBy('advert.date', 'DESC');
@@ -54,7 +55,13 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
             }
         }
 
-        return $qb->getQuery()->getResult();
+        $query = $qb->getQuery();
+
+        // On défini le debut et la fin de l'intervalle de récupération
+        $query->setFirstResult(($page - 1) * $nbAdvertPerPage)
+        ->setMaxResults($nbAdvertPerPage);
+
+        return new Paginator($query, true);
     }
 
     /**

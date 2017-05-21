@@ -35,17 +35,32 @@ class AdvertController extends Controller
 
     public function indexAction($page)
     {
-        if (empty($page) || $page < 1) {
+        if (empty($page)) {
+            $page = 1;
+        }
+
+        if ($page < 1) {
             throw new NotFoundHttpException('Page N° "' . $page . '" introuvable !');
         }
 
+        $nbAdvertPerPage = 4;
+
         $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
-        $listAdverts = $repository->getArrayAdverts($this->sets['index']); // Plus rapide que findAll() mais ne prend pas en compte les modifications et ce n'est pas grave puisqu'on fait que afficher
+        $listAdverts = $repository->getAdverts($page, $nbAdvertPerPage, null); // Retourne Paginator
+
         dump($listAdverts);
-        $nbAdverts = $repository->getNbAdverts(); // Juste pour le test, car je peux faire count($listAdverts) directement
+
+        $nbPages = ceil(count($listAdverts) / $nbAdvertPerPage);
+
+        if ($page > $nbPages) {
+            throw new NotFoundHttpException('Page N° "' . $page . '" n\'existe pas !');
+        }
+
         return $this->render('TestsPlatformBundle:Advert:index.html.twig', array(
             'listAdverts' => $listAdverts,
-            'nbAdverts' => (int) $nbAdverts,
+            'nbAdverts' => count($listAdverts), // le count(Paginator) donne le nombre tatal en BDD
+            'nbPages' => (int) $nbPages,
+            'page' => $page
         ));
     }
 
