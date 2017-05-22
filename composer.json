@@ -1,6 +1,7 @@
 {
     "name": "sofiane/psymfony",
     "license": "proprietary",
+    "description": "Projet perso pour tester Symfony 3",
     "type": "project",
     "autoload": {
         "psr-4": {
