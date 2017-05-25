@@ -33,6 +33,7 @@
 {{ dump(test) }}
 {% endif %}
 
+{% if nbPages is defined and nbPages != null %}
 <ul class="pagination">
   {# On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b #}
   {% for p in range(1, nbPages) %}
@@ -41,4 +42,5 @@
     </li>
   {% endfor %}
 </ul>
+{% endif %}
 {% endblock %}

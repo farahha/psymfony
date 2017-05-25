@@ -48,8 +48,6 @@ class AdvertController extends Controller
         $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
         $listAdverts = $repository->getAdverts($page, $nbAdvertPerPage, null); // Retourne Paginator
 
-        dump($listAdverts);
-
         $nbPages = ceil(count($listAdverts) / $nbAdvertPerPage);
 
         if ($page > $nbPages) {
@@ -78,7 +76,7 @@ class AdvertController extends Controller
         $title = $speciality[round(rand(0, 3))];
 
         if ($request->isMethod('POST')) {
-            $antispam = $this->container->get('tests_platform.antispam');
+            $antispam = $this->container->get('tests_platform.services.antispam');
 
             // Récupération des valeur envoyées dans le formulaire.
             $title = htmlspecialchars($request->get('title', $title)); // Le second parmètre est par défaut (pas clean)
@@ -294,6 +292,19 @@ class AdvertController extends Controller
             'listAdverts' => $listAdverts,
             'nbAdverts' => count($listAdverts),
             'test' => [$advert1,$application],
+        ]);
+    }
+
+    public function purgeAction($days)
+    {
+        $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
+
+        $adverts = $repository->getAdvertWithConditions();
+
+        $this->addFlash('info', "L'action n'est pas encore configurée");
+        return $this->render('TestsPlatformBundle:Advert:purge.html.twig', [
+            'nbPurgedAdverts' => 5,
+            'days' => $days,
         ]);
     }
 

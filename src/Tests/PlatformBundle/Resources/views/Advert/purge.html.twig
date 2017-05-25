@@ -1,0 +1,23 @@
+{# src/Tests/PlatformBundle/Resources/views/Advert/index.html.twig #}
+
+{% extends "TestsPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Rapport annonce purgées - {{ parent() }}
+{% endblock %}
+
+{% block testsplatform_body %}
+{% for message in app.session.flashbag.get('info') %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% if nbPurgedAdverts != 0 %}
+<p># <b>{{ nbPurgedAdverts }}</b> annonces n'ayant pas reçu de candidatures sur les <b>{{ days }}</b> derniers jours ont été supprimées.</p>
+{% endif %}
+
+{% if test is defined and test != null %}
+{{ dump(test) }}
+{% endif %}
+{% endblock %}

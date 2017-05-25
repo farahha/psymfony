@@ -136,6 +136,22 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
+    public function getAdvertWithConditions($conditions = null)
+    {
+        $qb = $this->createQueryBuilder('advert')
+                ->leftJoin('advert.applications', 'app')
+                //->addSelect('app')
+        ;
+        $this->whereNoApplications($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function whereNoApplications(QueryBuilder $qb)
+    {
+        $qb->andWhere('app.id IS NULL');
+    }
+
     public function myFindAll()
     {
 

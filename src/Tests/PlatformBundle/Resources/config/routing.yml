@@ -42,3 +42,9 @@ tests_platform_delete:
         _controller: TestsPlatformBundle:Advert:delete
     requirements:
         id: \d+
+tests_platform_purge:
+    path:   /purge/{days}
+    defaults:
+        _controller: TestsPlatformBundle:Advert:purge
+    requirements:
+        days: \d+
