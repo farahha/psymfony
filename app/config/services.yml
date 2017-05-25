@@ -4,20 +4,36 @@ parameters:
 #    parameter_name: value
 
 services:
-    tests_platform.antispam:
+    tests_platform.services.antispam:
         # class : namespace où se trouve la classe
-        class: Tests\PlatformBundle\AntiSpam\AntiSpam
+        class: Tests\PlatformBundle\Services\AntiSpam\AntiSpam
         arguments:
             - "@mailer"
-            - %locale%
+            - "%locale%"
             - 100
-    tests_platform.email.application_mailer:
-        class: Tests\PlatformBundle\Email\ApplicationMailer
+    tests_platform.services.email.application_mailer:
+        class: Tests\PlatformBundle\Services\Email\ApplicationMailer
         arguments:
             - "@mailer"
-    tests_platform.doctrine_listener.application_creation:
-        class: Tests\PlatformBundle\DoctrineListener\ApplicationCreationListener
+    # TODO : créer un service d'envoi de mails générique (Pas de application, advert ...)
+    tests_platform.services.email.advert_mailer:
+        class: Tests\PlatformBundle\Services\Email\AdvertMailer
         arguments:
-            - "@tests_platform.email.application_mailer"
+            - "@mailer"
+    tests_platform.services.doctrine_listener.application_creation:
+        class: Tests\PlatformBundle\Services\DoctrineListener\ApplicationCreationListener
+        arguments:
+            - "@tests_platform.services.email.application_mailer"
         tags:
             - { name: doctrine.event_listener, event: postPersist }
+    tests_platform.services.doctrine_listener.advert:
+        class: Tests\PlatformBundle\Services\DoctrineListener\AdvertListener
+        arguments:
+            - "@tests_platform.services.email.advert_mailer"
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, method: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+    tests_platform.services.purger.advert:
+        class: Tests\PlatformBundle\Services\Purger\Advert
+        arguments:
+            - "@tests_platform.services.email.advert_mailer"
