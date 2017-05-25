@@ -1,7 +1,7 @@
 <?php
-namespace Tests\PlatformBundle\DoctrineListener;
+namespace Tests\PlatformBundle\Services\DoctrineListener;
 
-use Tests\PlatformBundle\Email\ApplicationMailer;
+use Tests\PlatformBundle\Services\Email\ApplicationMailer;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Tests\PlatformBundle\Entity\Application;
 

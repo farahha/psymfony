@@ -1,5 +1,5 @@
 <?php
-namespace Tests\PlatformBundle\Email;
+namespace Tests\PlatformBundle\Services\Email;
 
 use Tests\PlatformBundle\Entity\Application;
 
