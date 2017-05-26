@@ -14,6 +14,11 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
+    const CONDITION_EQUAL_TO = 0x1;
+    const CONDITION_GREATER_THAN = 0x2;
+    const CONDITION_LOWER_THAN = 0x4;
+    const CONDITION_IS_NULL = 0x8;
+    const CONDITION_NOT = 0x10;
 
     /**
      * Récupère toutes les annonces par date la plus recente
@@ -150,6 +155,29 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
     public function whereNoApplications(QueryBuilder $qb)
     {
         $qb->andWhere('app.id IS NULL');
+    }
+
+    public function whereDate(QueryBuilder $qb, $date, $conditions = self::CONDITION_EQUAL_TO)
+    {
+        switch ($conditions) {
+            case self::CONDITION_EQUAL_TO:
+                $qb->andWhere('advert.date = ?', $date);
+                break;
+            case self::CONDITION_GREATER_THAN:
+                $qb->andWhere('advert.date > ?', $date);
+                break;
+            case self::CONDITION_LOWER_THAN:
+                $qb->andWhere('advert.date < ?', $date);
+                break;
+            case self::CONDITION_GREATER_THAN | self::CONDITION_GREATER_THAN:
+                $qb->andWhere('advert.date >= ?', $date);
+                break;
+            case self::CONDITION_LOWER_THAN | self::CONDITION_GREATER_THAN:
+                $qb->andWhere('advert.date <= ?', $date);
+                break;
+            default:
+                $qb->andWhere('advert.date = ?', $date);
+        }
     }
 
     public function myFindAll()

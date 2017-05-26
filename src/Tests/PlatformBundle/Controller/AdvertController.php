@@ -300,7 +300,7 @@ class AdvertController extends Controller
         $purgerService = $this->container->get('tests_platform.services.purger.advert');
 
         $adverts = $purgerService->purge($days);
-
+        dump($adverts);
         $this->addFlash('info', "L'action n'est pas encore configurée");
 
         return $this->render('TestsPlatformBundle:Advert:purge.html.twig', [
