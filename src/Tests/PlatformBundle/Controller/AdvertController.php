@@ -297,13 +297,14 @@ class AdvertController extends Controller
 
     public function purgeAction($days)
     {
-        $repository = $this->getDoctrine()->getManager()->getRepository('Tests\PlatformBundle\Entity\Advert');
+        $purgerService = $this->container->get('tests_platform.services.purger.advert');
 
-        $adverts = $repository->getAdvertWithConditions();
+        $adverts = $purgerService->purge($days);
 
         $this->addFlash('info', "L'action n'est pas encore configurée");
+
         return $this->render('TestsPlatformBundle:Advert:purge.html.twig', [
-            'nbPurgedAdverts' => 5,
+            'nbPurgedAdverts' => count($adverts),
             'days' => $days,
         ]);
     }

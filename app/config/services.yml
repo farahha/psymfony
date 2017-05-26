@@ -36,4 +36,4 @@ services:
     tests_platform.services.purger.advert:
         class: Tests\PlatformBundle\Services\Purger\Advert
         arguments:
-            - "@tests_platform.services.email.advert_mailer"
+            - "@doctrine.orm.default_entity_manager"
