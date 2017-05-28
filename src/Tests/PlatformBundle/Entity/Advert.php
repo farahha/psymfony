@@ -31,7 +31,7 @@ class Advert
     private $applications;
 
     /**
-     * @ORM\OneToMany(targetEntity="Tests\PlatformBundle\Entity\AdvertSkill", mappedBy="advert")
+     * @ORM\OneToMany(targetEntity="Tests\PlatformBundle\Entity\AdvertSkill", mappedBy="advert", cascade={"remove"})
      */
     private $skills;
 
