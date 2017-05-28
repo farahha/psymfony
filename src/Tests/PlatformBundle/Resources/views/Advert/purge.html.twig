@@ -14,7 +14,7 @@
 {% endfor %}
 
 {% if nbPurgedAdverts != 0 %}
-<p># <b>{{ nbPurgedAdverts }}</b> annonces n'ayant pas reçu de candidatures sur les <b>{{ days }}</b> derniers jours ont été supprimées.</p>
+<p># <b>{{ nbPurgedAdverts }}</b> annonces créées avant le <b>{{ date|date("d-m-Y à h:m:i") }}</b> et n'ayant pas reçu de candidatures ont été supprimées.</p>
 {% endif %}
 
 {% if test is defined and test != null %}

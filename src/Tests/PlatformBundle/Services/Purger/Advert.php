@@ -14,14 +14,26 @@ class Advert
 
     public function purge($days)
     {
-        if (empty($days)){
+        if (empty($days)) {
             return;
         }
 
         $repository = $this->entityManager->getRepository('Tests\PlatformBundle\Entity\Advert');
-        $adverts = $repository->getAdvertWithConditions();
+        $adverts = $repository->getAdvertsWithoutApplications($days);
 
-        return $adverts;
+        if (empty($adverts)) {
+            return;
+        }
 
+        $nbPurgedAdverts = 0;
+
+        foreach ($adverts as $advert) {
+            $this->entityManager->remove($advert);
+            $nbPurgedAdverts++;
+        }
+
+        $this->entityManager->flush();
+
+        return $nbPurgedAdverts;
     }
 }

@@ -141,13 +141,24 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
-    public function getAdvertWithConditions($conditions = null)
+    public function getAdvertsWithoutApplications($days)
     {
         $qb = $this->createQueryBuilder('advert')
-                ->leftJoin('advert.applications', 'app')
-                //->addSelect('app')
-        ;
+                ->leftJoin('advert.applications', 'app');
+
         $this->whereNoApplications($qb);
+
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P'.(int)$days.'D'));
+
+        // c'est normalement ce qui est demandé, mais c'est pas logique car les annonces qui n'ont
+        // jamais été modifiées, ne seront jamais supprimées
+        // Je choisi de me baser sur la date de création sinon, il faut que je modifie mon entité Advert
+        // Pour seter la date mise à jour en même temps que la date de création :/
+
+        // $this->whereUpdated($qb, $date, self::CONDITION_GREATER_THAN);
+
+        $this->whereDate($qb, $date, self::CONDITION_GREATER_THAN);
 
         return $qb->getQuery()->getResult();
     }
@@ -155,29 +166,58 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
     public function whereNoApplications(QueryBuilder $qb)
     {
         $qb->andWhere('app.id IS NULL');
+        // $qb->andWhere('app.id IS EMPTY'); // => Ne marche pas
+        // $qb->andWhere('app.id = :empty')->setParameter('empty', serialize([])); // => Ne marche pas
     }
 
-    public function whereDate(QueryBuilder $qb, $date, $conditions = self::CONDITION_EQUAL_TO)
+    public function whereDate(QueryBuilder $qb, $date, $condition = self::CONDITION_EQUAL_TO)
     {
-        switch ($conditions) {
+        switch ($condition) {
             case self::CONDITION_EQUAL_TO:
-                $qb->andWhere('advert.date = ?', $date);
+                $qb->andWhere('advert.date = :date');
                 break;
             case self::CONDITION_GREATER_THAN:
-                $qb->andWhere('advert.date > ?', $date);
+                $qb->andWhere('advert.date > :date');
                 break;
             case self::CONDITION_LOWER_THAN:
-                $qb->andWhere('advert.date < ?', $date);
+                $qb->andWhere('advert.date < :date');
                 break;
-            case self::CONDITION_GREATER_THAN | self::CONDITION_GREATER_THAN:
-                $qb->andWhere('advert.date >= ?', $date);
+            case self::CONDITION_GREATER_THAN | self::CONDITION_EQUAL_TO:
+                $qb->andWhere('advert.date >= :date');
                 break;
-            case self::CONDITION_LOWER_THAN | self::CONDITION_GREATER_THAN:
-                $qb->andWhere('advert.date <= ?', $date);
+            case self::CONDITION_LOWER_THAN | self::CONDITION_EQUAL_TO:
+                $qb->andWhere('advert.date <= :date');
                 break;
             default:
-                $qb->andWhere('advert.date = ?', $date);
+                $qb->andWhere('advert.date = :date');
         }
+
+        $qb->setParameter('date', $date);
+    }
+
+    public function whereUpdated(QueryBuilder $qb, $date, $condition = self::CONDITION_EQUAL_TO)
+    {
+        switch ($condition) {
+            case self::CONDITION_EQUAL_TO:
+                $qb->andWhere('advert.updated = :updated');
+                break;
+            case self::CONDITION_GREATER_THAN:
+                $qb->andWhere('advert.updated > :updated');
+                break;
+            case self::CONDITION_LOWER_THAN:
+                $qb->andWhere('advert.updated < :updated');
+                break;
+            case self::CONDITION_GREATER_THAN | self::CONDITION_EQUAL_TO:
+                $qb->andWhere('advert.updated >= :updated');
+                break;
+            case self::CONDITION_LOWER_THAN | self::CONDITION_EQUAL_TO:
+                $qb->andWhere('advert.updated <= :updated');
+                break;
+            default:
+                $qb->andWhere('advert.updated = :updated');
+        }
+
+        $qb->setParameter('updated', $date);
     }
 
     public function myFindAll()

@@ -299,13 +299,16 @@ class AdvertController extends Controller
     {
         $purgerService = $this->container->get('tests_platform.services.purger.advert');
 
-        $adverts = $purgerService->purge($days);
-        dump($adverts);
-        $this->addFlash('info', "L'action n'est pas encore configurée");
+        $nbPurgedAdverts = (int) $purgerService->purge($days);
+
+        $this->addFlash('info', "L'action fait appel au service de purge pour supprimer les annonces qui n'ont pas reçu de candidatures");
+
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P'.(int)$days.'D'));
 
         return $this->render('TestsPlatformBundle:Advert:purge.html.twig', [
-            'nbPurgedAdverts' => count($adverts),
-            'days' => $days,
+            'nbPurgedAdverts' => $nbPurgedAdverts,
+            'date' => (new \DateTime())->sub(new \DateInterval('P'.(int)$days.'D')),
         ]);
     }
 
