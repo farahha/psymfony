@@ -2,18 +2,28 @@
 namespace Tests\PlatformBundle\Services\Purger;
 
 use Doctrine\ORM\EntityManager;
+use Monolog\Logger;
 
 class Advert
 {
     private $entityManager;
+    private $logger;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, Logger $logger)
     {
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
     }
 
+    /**
+     *
+     * @param integer $days
+     * @return void|number
+     */
     public function purge($days)
     {
+        $this->logger->info('lancement de la fonction purge');
+
         if (empty($days)) {
             return;
         }

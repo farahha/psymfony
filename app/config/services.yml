@@ -36,3 +36,4 @@ services:
         class: Tests\PlatformBundle\Services\Purger\Advert
         arguments:
             - "@doctrine.orm.default_entity_manager"
+            - "@monolog.logger"
