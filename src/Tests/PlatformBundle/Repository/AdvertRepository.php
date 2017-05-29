@@ -156,9 +156,9 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         // Je choisi de me baser sur la date de création sinon, il faut que je modifie mon entité Advert
         // Pour seter la date mise à jour en même temps que la date de création :/
 
-        // $this->whereUpdated($qb, $date, self::CONDITION_GREATER_THAN);
+        // $this->whereUpdated($qb, $date, self::CONDITION_LOWER_THAN);
 
-        $this->whereDate($qb, $date, self::CONDITION_GREATER_THAN);
+        $this->whereDate($qb, $date, self::CONDITION_LOWER_THAN);
 
         return $qb->getQuery()->getResult();
     }
