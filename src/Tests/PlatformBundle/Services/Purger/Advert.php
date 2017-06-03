@@ -16,16 +16,15 @@ class Advert
     }
 
     /**
-     *
+     * Récupère les annonces qui n'ont pas reçu de candidatures et qui datent d'avant (date - X jours)
      * @param integer $days
      * @return void|number
      */
     public function purge($days)
     {
-        $this->logger->error('Purge : Aucune annonce à supprimer');
 
         if (empty($days)) {
-            $this->logger->info('Purge : Lancement de la fonction purge avec un paramètre days null');
+            $this->logger->warning('Purge : Lancement de la fonction purge avec un paramètre days null');
             return;
         }
 
@@ -33,7 +32,7 @@ class Advert
         $adverts = $repository->getAdvertsWithoutApplications($days);
 
         if (empty($adverts)) {
-            $this->logger->info('Purge : Aucune annonce à supprimer');
+            $this->logger->warning('Purge : Aucune annonce à supprimer');
             return;
         }
 
