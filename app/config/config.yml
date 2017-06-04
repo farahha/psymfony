@@ -42,7 +42,8 @@ twig:
     globals:
         webmaster: "%webmaster%"
         webmaster_email: "%webmaster_email%"
-
+    form_themes:
+        - 'bootstrap_3_layout.html.twig'
 # Doctrine Configuration
 doctrine:
     dbal:
