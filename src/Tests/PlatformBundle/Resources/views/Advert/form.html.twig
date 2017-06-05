@@ -36,9 +36,24 @@
 
   {{ form_row(form.author) }}
   {{ form_row(form.published) }}
-
-  {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
-  {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-sm col-sm-3 pull-right'}}) }}
+  
+  <div class="form-group">
+    <div class="col-sm">
+    {{ form_label(form.image, "Image", {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_label(form.image.url, "Lien de l'image", {'label_attr': {'class': 'form-horizontal'}}) }}
+    {{ form_errors(form.image.url) }}
+    <div class="col-sm">
+      {{ form_widget(form.image.url, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {{ form_label(form.image.alt, "Alt - Si pas d'image", {'label_attr': {'class': 'form-horizontal'}}) }}
+    {{ form_errors(form.image.alt) }}
+    <div class="col-sm">
+      {{ form_widget(form.image.alt, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+      {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-sm col-sm-3 pull-right'}}) }}
+  </div>
 
   {# Génération automatique des champs pas encore écrits.
      Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
