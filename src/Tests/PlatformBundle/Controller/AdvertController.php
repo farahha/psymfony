@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Tests\PlatformBundle\Form\AdvertType;
 
 class AdvertController extends Controller
 {
@@ -70,31 +71,14 @@ class AdvertController extends Controller
 
     public function addAction(Request $request)
     {
-        // On crée un objet Advert
         $advert = new Advert();
 
-        // Ici, on préremplit avec la date d'aujourd'hui, par exemple
-        // Cette date sera donc préaffichée dans le formulaire, cela facilite le travail de l'utilisateur
-        $advert->setDate(new \Datetime());
+        //$formBuilder = $this->get('form.factory')->createBuilder(AdvertType::class, $advert);
+        //$form = $formBuilder->getForm();
 
-        // On crée le FormBuilder grâce au service form factory
-        $formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $advert);
-
-        // On ajoute les champs de l'entité que l'on veut à notre formulaire
-        $formBuilder
-        ->add('date',      DateType::class)
-        ->add('title',     TextType::class)
-        ->add('content',   TextareaType::class)
-        ->add('author',    TextType::class)
-        ->add('published', CheckboxType::class, ['required' => false,])
-        ->add('save',      SubmitType::class)
-        ;
         // Pour l'instant, pas de candidatures, catégories, etc., on les gérera plus tard
 
-        // À partir du formBuilder, on génère le formulaire
-        $form = $formBuilder->getForm();
-
-        // Si la requête est en POST
+        $form = $this->createForm(AdvertType::class, $advert);
         if ($request->isMethod('POST')) {
             // On fait le lien Requête <-> Formulaire
             // À partir de maintenant, la variable $advert contient les valeurs entrées dans le formulaire par le visiteur
