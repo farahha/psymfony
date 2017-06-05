@@ -6,7 +6,6 @@
 
 {% block testsplatform_body %}
 
-  <h3>Ajouter une annonce</h3>
     {% for message in app.session.flashbag.get('info') %}
         <div class="alert alert-info">
             {{ message }}
