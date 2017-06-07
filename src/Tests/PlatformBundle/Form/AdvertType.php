@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class AdvertType extends AbstractType
 {
@@ -21,10 +22,15 @@ class AdvertType extends AbstractType
         $builder
             ->add('date', DateTimeType::class)
             ->add('title', TextType::class)
-            ->add('author',TextType::class)
+            ->add('author', TextType::class)
             ->add('content', TextareaType::class)
             ->add('published', CheckboxType::class, ['required' => false])
             ->add('image', ImageType::class)
+            ->add('categories', CollectionType::class, [
+                    'entry_type' => CategoryType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true,
+            ])
             ->add('save', SubmitType::class)
         ;
     }
@@ -46,6 +52,4 @@ class AdvertType extends AbstractType
     {
         return 'tests_platformbundle_advert';
     }
-
-
 }
