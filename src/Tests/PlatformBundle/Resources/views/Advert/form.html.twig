@@ -49,22 +49,41 @@
 
         {{ form_label(form.image.alt, "Alt - Si pas d'image", {'label_attr': {'class': 'form-horizontal'}}) }}
         {{ form_errors(form.image.alt) }}
+
         <div class="col-sm">
             {{ form_widget(form.image.alt, {'attr': {'class': 'form-control'}}) }}
         </div>
-        {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
-        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-sm col-sm-3 pull-right'}}) }}
+
+        <div>
+            {{ form_label(form.categories, 'Sélectionnez au moins une catégorie') }}
+            {{ form_errors(form.categories) }}
+            {{ form_widget(form.categories) }}
+        </div>
+        <br>
+        <div>
+            {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+            {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-sm col-sm-3 pull-right'}}) }}
+        </div>
     </div>
 
-    <div class="form-group">
-        {{ form_row(form.categories) }}
-        <a href="#" id="add_category" class="btn btn-default">Ajouter une catégorie</a>
-    </div>
+    {# Génération automatique des champs pas encore écrits.
+    Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
+    et tous les champs cachés (type « hidden »). #}
+    {{ form_rest(form) }}
+
+    {# Fermeture de la balise <form> du formulaire HTML #}
+    {{ form_end(form) }}
 
     {# On charge la bibliothèque jQuery. Ici, je la prends depuis le CDN google
     mais si vous l'avez en local, changez simplement l'adresse. #}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript">
+        $(document).ready(function() {
+            $('.js-datepicker').datepicker({
+                format: 'dd-mm-yyyy'
+            });
+        });
+
         $(document).ready(function() {
             // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
             var $container = $('div#tests_platformbundle_advert_categories');
@@ -129,12 +148,4 @@
             }
         });
     </script>
-
-    {# Génération automatique des champs pas encore écrits.
-    Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
-    et tous les champs cachés (type « hidden »). #}
-    {{ form_rest(form) }}
-
-    {# Fermeture de la balise <form> du formulaire HTML #}
-    {{ form_end(form) }}
 </div>

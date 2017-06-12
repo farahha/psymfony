@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class AdvertType extends AbstractType
 {
@@ -20,16 +20,19 @@ class AdvertType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date', DateTimeType::class)
+            ->add('date', DateTimeType::class, [
+                'widget' => 'single_text',
+                'html5' => false,
+                'format' => 'dd-MM-yyyy',])
             ->add('title', TextType::class)
             ->add('author', TextType::class)
             ->add('content', TextareaType::class)
             ->add('published', CheckboxType::class, ['required' => false])
             ->add('image', ImageType::class)
-            ->add('categories', CollectionType::class, [
-                    'entry_type' => CategoryType::class,
-                    'allow_add' => true,
-                    'allow_delete' => true,
+            ->add('categories', EntityType::class, [
+                    'class' => 'TestsPlatformBundle:Category',
+                    'choice_label' => 'name',
+                    'multiple' => true,
             ])
             ->add('save', SubmitType::class)
         ;
