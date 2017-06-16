@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Tests\PlatformBundle\Repository\CategoryRepository;
 
 class AdvertType extends AbstractType
 {
@@ -19,6 +20,8 @@ class AdvertType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $pattern = 'D%';
+
         $builder
             ->add('date', DateTimeType::class, [
                 'widget' => 'single_text',
@@ -33,6 +36,9 @@ class AdvertType extends AbstractType
                     'class' => 'TestsPlatformBundle:Category',
                     'choice_label' => 'name',
                     'multiple' => true,
+                    'query_builder' => function(CategoryRepository $repository) use ($pattern) {
+                        return $repository->getLikeQueryBuilder($pattern);
+                    }
             ])
             ->add('save', SubmitType::class)
         ;

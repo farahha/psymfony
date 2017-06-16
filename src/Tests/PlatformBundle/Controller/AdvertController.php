@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Tests\PlatformBundle\Form\AdvertType;
+use Tests\PlatformBundle\Form\AdvertEditType;
 
 class AdvertController extends Controller
 {
@@ -73,11 +74,6 @@ class AdvertController extends Controller
     {
         $advert = new Advert();
 
-        //$formBuilder = $this->get('form.factory')->createBuilder(AdvertType::class, $advert);
-        //$form = $formBuilder->getForm();
-
-        // Pour l'instant, pas de candidatures, catégories, etc., on les gérera plus tard
-
         $form = $this->createForm(AdvertType::class, $advert);
         if ($request->isMethod('POST')) {
             // On fait le lien Requête <-> Formulaire
@@ -108,9 +104,7 @@ class AdvertController extends Controller
         return $this->render('TestsPlatformBundle:Advert:add.html.twig', array(
             'form' => $form->createView(),
         ));
-
-
-        /*
+/*
         // Juste pour remplir mes annonces
         $level = ['Junior', 'Confirmé', 'Expert'];
         $speciality = ['Back end PHP5 ZF2','Back end PHP5 SF3','Front end JS', 'Front end React'];
@@ -120,56 +114,7 @@ class AdvertController extends Controller
             'http://www.business-agility.com/wp-content/uploads/2014/07/850x236-events.jpg',
             'http://www.karmatechnologies.asia/wp-content/uploads/2015/11/Web-Applications.jpg',
         ];
-        $title = $speciality[round(rand(0, 3))];
-
-        if ($request->isMethod('POST')) {
-            $antispam = $this->container->get('tests_platform.services.antispam');
-
-            // Récupération des valeur envoyées dans le formulaire.
-            $title = htmlspecialchars($request->get('title', $title)); // Le second parmètre est par défaut (pas clean)
-            $author = htmlspecialchars($request->get('author', 'kabyliXX'));
-            $content = htmlspecialchars($request->get('content', 'Nous recherchons pour notre entreprise spécialisée dans le développement un développeur '.$title));
-
-            // création d'une entité Advert
-            $advert = new Advert();
-            $advert->setTitle($title);
-            $advert->setAuthor($author);
-            $advert->setContent($content);
-
-            if ($antispam->isSpam($content)) {
-                $advert->setPublished(false);
-                //throw new \Exception("Vous annonce a été détecté comme spam ...");
-            }
-
-            // Création d'une image
-            $image = new Image();
-            $image->setUrl($urls[round(rand(0, 3))]);
-            $image->setAlt("Je n'ai pas trouvé d'image");
-            $advert->setImage($image);
-
-            $em = $this->getDoctrine()->getManager();
-            $repository = $this->getDoctrine()->getRepository("Tests\PlatformBundle\Entity\Skill");
-
-            // récupération de tous les skills
-            $listSkills = $repository->findAll();
-            foreach ($listSkills as $skill) {
-                $advertSkill = new AdvertSkill();
-                $advertSkill->setAdvert($advert);
-                $advertSkill->setSkill($skill);
-                $advertSkill->setLevel($level[round(rand(0, 2))]); // Oui c'est pas joli :/
-                $em->persist($advertSkill);
-            }
-
-            $em->persist($advert);
-            $em->flush();
-
-            $this->addFlash('info', 'Votre annonce ('.$advert->getTitle().') a bien été enregistrée.');
-            return $this->redirectToRoute('tests_platform_view', ['id' => $advert->getId()]); // le 5 c'est juste pour le test
-        }
-
-        $this->addFlash('info', 'Le formulaire d\'ajout d\'annonce n\'est pas encore créé.');
-        return $this->render('TestsPlatformBundle:Advert:add.html.twig');
-        */
+*/
     }
 
     public function editAction($id, Request $request)
@@ -185,67 +130,23 @@ class AdvertController extends Controller
         if (null === $advert) {
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
-/*
-        $em = $this->getDoctrine()->getManager();
 
-        $listCategories = $em->getRepository('Tests\PlatformBundle\Entity\Category')->findAll();
-
-        foreach ($listCategories as $category) {
-            $advert->addCategory($category);
-        }
-*/
-        // Pour persister le changement dans la relation, il faut persister l'entité propriétaire
-        // Ici, Advert est le propriétaire, donc inutile de la persister car on l'a récupérée depuis Doctrine
-
-        // Étape 2 : On déclenche l'enregistrement
-        $em->flush();
-
+        $form = $this->createForm(AdvertEditType::class, $advert);
         if ($request->isMethod('POST')) {
-            $antispam = $this->container->get('tests_platform.antispam');
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($advert);
+                $em->flush();
 
-            // Récupération des valeur envoyées dans le formulaire.
-            if (!empty($request->get('title'))) {
-                $title = htmlspecialchars($request->get('title'));
+                $this->addFlash('notice', 'Annonce mise à jour.');
+
+                return $this->redirectToRoute('tests_platform_view', array('id' => $advert->getId()));
             }
-            if (!empty($request->get('author'))) {
-                $author = htmlspecialchars($request->get('author'));
-            }
-            if (!empty($request->get('content'))) {
-                $content = htmlspecialchars($request->get('content'));
-            }
-
-            $advert->setTitle($title);
-            $advert->setAuthor($author);
-            $advert->setContent($content);
-
-            if ($antispam->isSpam($content)) {
-                $advert->setPublished(false);
-                //throw new \Exception("Vous annonce a été détecté comme spam ...");
-            }
-
-            $image = new Image();
-            $image->setUrl($urls[round(rand(0, 3))]);
-            $image->setAlt("Je n'ai pas trouvé d'image");
-            $advert->setImage($image);
-
-            $repository = $this->getDoctrine()->getRepository("Tests\PlatformBundle\Entity\Skill");
-
-            // récupération de tous les skills
-            $listSkills = $repository->findAll();
-            foreach ($listSkills as $skill) {
-                $advertSkill = new AdvertSkill();
-                $advertSkill->setAdvert($advert);
-                $advertSkill->setSkill($skill);
-                $advertSkill->setLevel($level[round(rand(0, 2))]); // Oui c'est pas joli :/
-                $em->persist($advertSkill);
-            }
-
-            $this->addFlash('Info', 'L\'annonce '.$advert->getTitle().' a bien été mise à jour');
-            return $this->redirectToRoute('tests_platform_view', ['id' => $id]);
         }
 
         return $this->render('TestsPlatformBundle:Advert:edit.html.twig', array(
-            'advert' => $advert
+            'form' => $form->createView(),
         ));
     }
 
@@ -275,6 +176,7 @@ class AdvertController extends Controller
 
         return $this->render('TestsPlatformBundle:Advert:delete.html.twig', ['advert' => $advert]);
     }
+
 
     public function viewAction($id)
     {

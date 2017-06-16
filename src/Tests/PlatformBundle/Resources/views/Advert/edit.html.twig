@@ -1,24 +1,22 @@
 {% extends "TestsPlatformBundle::layout.html.twig" %}
 
 {% block title %}
-  Modifier une annonce - {{ parent() }}
+  modifier l'annonce - {{ parent() }}
 {% endblock %}
 
 {% block testsplatform_body %}
 
-  <h3>Modifier une annonce</h3>
-
+    {% for message in app.session.flashbag.get('info') %}
+        <div class="alert alert-info">
+            {{ message }}
+        </div>
+    {% endfor %}
   {{ include("TestsPlatformBundle:Advert:form.html.twig") }}
 
   <p>
-    Vous éditez une annonce déjà existante, merci de ne pas changer
-    l'esprit général de l'annonce déjà publiée.
-  </p>
-
-  <p>
-    <a href="{{ path('tests_platform_view', {'id': advert.id}) }}" class="btn btn-default">
+    <a href="{{ path('tests_platform') }}" class="btn btn-default">
       <i class="glyphicon glyphicon-chevron-left"></i>
-      Retour à l'annonce
+      Retour
     </a>
   </p>
 

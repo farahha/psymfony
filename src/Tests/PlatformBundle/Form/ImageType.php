@@ -16,7 +16,7 @@ class ImageType extends AbstractType
     {
         $builder
             ->add('url', TextType::class)
-            ->add('alt', TextType::class)
+            ->add('alt', TextType::class, ['required' => false])
         ;
     }
 
