@@ -13,6 +13,11 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Tests\PlatformBundle\Repository\CategoryRepository;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+
+//use Symfony\Component\OptionsResolver\OptionsResolver;
+
 class AdvertType extends AbstractType
 {
     /**
@@ -36,12 +41,26 @@ class AdvertType extends AbstractType
                     'class' => 'TestsPlatformBundle:Category',
                     'choice_label' => 'name',
                     'multiple' => true,
-                    'query_builder' => function(CategoryRepository $repository) use ($pattern) {
+                    'query_builder' => function (CategoryRepository $repository) use ($pattern) {
                         return $repository->getLikeQueryBuilder($pattern);
                     }
             ])
             ->add('save', SubmitType::class)
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $advert = $event->getData();
+            if ($advert === null) {
+                return;
+            }
+
+            if (!$advert->getPublished() || $advert->getId() === null) {
+                $event->getForm()->add('published', CheckboxType::class, ['required' => false]);
+            } else {
+                $event->getForm()->remove('published');
+            }
+        }
+        );
     }
 
     /**

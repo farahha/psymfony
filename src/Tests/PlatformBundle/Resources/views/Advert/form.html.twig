@@ -36,7 +36,9 @@
     </div>
 
     {{ form_row(form.author) }}
+    {% if form.published is defined %}
     {{ form_row(form.published) }}
+    {% endif %}
 
     <div class="form-group">
         <div class="col-sm">
