@@ -11,27 +11,22 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Tests\PlatformBundle\Repository\CategoryRepository;
-
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-
-//use Symfony\Component\OptionsResolver\OptionsResolver;
+use Tests\PlatformBundle\Repository\CategoryRepository;
 
 class AdvertType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $pattern = 'D%';
 
         $builder
             ->add('date', DateTimeType::class, [
-                'widget' => 'single_text',
-                'html5' => false,
-                'format' => 'dd-MM-yyyy',])
+                //'widget' => 'single_text',
+                //'html5' => false,
+                //'format' => 'dd-MM-yyyy',
+            ])
             ->add('title', TextType::class)
             ->add('author', TextType::class)
             ->add('content', TextareaType::class)
@@ -64,9 +59,6 @@ class AdvertType extends AbstractType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -74,9 +66,6 @@ class AdvertType extends AbstractType
         ));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return 'tests_platformbundle_advert';
