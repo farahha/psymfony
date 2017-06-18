@@ -1,7 +1,5 @@
 <?php
 
-// src/Tests/PlatformBundle/Controller/AdvertController.php
-
 namespace Tests\PlatformBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -11,12 +9,6 @@ use Tests\PlatformBundle\Entity\Advert;
 use Tests\PlatformBundle\Entity\Image;
 use Tests\PlatformBundle\Entity\AdvertSkill;
 use Tests\PlatformBundle\Entity\Application;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Tests\PlatformBundle\Form\AdvertType;
 use Tests\PlatformBundle\Form\AdvertEditType;
 
@@ -73,48 +65,21 @@ class AdvertController extends Controller
     public function addAction(Request $request)
     {
         $advert = new Advert();
-
         $form = $this->createForm(AdvertType::class, $advert);
-        if ($request->isMethod('POST')) {
-            // On fait le lien Requête <-> Formulaire
-            // À partir de maintenant, la variable $advert contient les valeurs entrées dans le formulaire par le visiteur
-            $form->handleRequest($request);
 
-            // On vérifie que les valeurs entrées sont correctes
-            // (Nous verrons la validation des objets en détail dans le prochain chapitre)
-            if ($form->isValid()) {
-                // On enregistre notre objet $advert dans la base de données, par exemple
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($advert);
-                $em->flush();
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($advert);
+            $em->flush();
 
-                $this->addFlash('notice', 'Annonce bien enregistrée.');
+            $this->addFlash('notice', 'Annonce bien enregistrée.');
 
-                // On redirige vers la page de visualisation de l'annonce nouvellement créée
-                return $this->redirectToRoute('tests_platform_view', array('id' => $advert->getId()));
-            }
+            return $this->redirectToRoute('tests_platform_view', array('id' => $advert->getId()));
         }
 
-        // À ce stade, le formulaire n'est pas valide car :
-        // - Soit la requête est de type GET, donc le visiteur vient d'arriver sur la page et veut voir le formulaire
-        // - Soit la requête est de type POST, mais le formulaire contient des valeurs invalides, donc on l'affiche de nouveau
-
-        // On passe la méthode createView() du formulaire à la vue
-        // afin qu'elle puisse afficher le formulaire toute seule
         return $this->render('TestsPlatformBundle:Advert:add.html.twig', array(
             'form' => $form->createView(),
         ));
-/*
-        // Juste pour remplir mes annonces
-        $level = ['Junior', 'Confirmé', 'Expert'];
-        $speciality = ['Back end PHP5 ZF2','Back end PHP5 SF3','Front end JS', 'Front end React'];
-        $urls = [
-            'http://www.business-agility.com/wp-content/uploads/2014/07/850x236-implementation.jpg',
-            'http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg',
-            'http://www.business-agility.com/wp-content/uploads/2014/07/850x236-events.jpg',
-            'http://www.karmatechnologies.asia/wp-content/uploads/2015/11/Web-Applications.jpg',
-        ];
-*/
     }
 
     public function editAction($id, Request $request)
@@ -123,58 +88,55 @@ class AdvertController extends Controller
             throw new NotFoundHttpException("Pas d'id de renseigné.");
         }
 
-        $repository = $this->getDoctrine()->getRepository('Tests\PlatformBundle\Entity\Advert');
+        $em = $this->getDoctrine()->getManager();
 
-        $advert = $repository->find($id);
+        $advert = $em->getRepository('Tests\PlatformBundle\Entity\Advert')->find($id);
 
-        if (null === $advert) {
+        if ($advert === null) {
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
 
         $form = $this->createForm(AdvertEditType::class, $advert);
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($advert);
-                $em->flush();
 
-                $this->addFlash('notice', 'Annonce mise à jour.');
-
-                return $this->redirectToRoute('tests_platform_view', array('id' => $advert->getId()));
-            }
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em->flush();
+            $this->addFlash('notice', 'L\'annonce a bien été mise à jour.');
+            return $this->redirectToRoute('tests_platform_view', array('id' => $advert->getId()));
         }
 
-        return $this->render('TestsPlatformBundle:Advert:edit.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('TestsPlatformBundle:Advert:edit.html.twig',
+            [
+                'form' => $form->createView(),
+                'advert' => $advert,
+            ]
+        );
     }
 
-    public function deleteAction($id)
+    public function deleteAction($id, Request $request)
     {
         if (empty($id)) {
             throw new NotFoundHttpException("Empty advert ID");
         }
+        $em = $this->getDoctrine()->getManager();
+        $advert = $em->getRepository('Tests\PlatformBundle\Entity\Advert')->find($id);
 
-        $repository = $this->getDoctrine()->getRepository('Tests\PlatformBundle\Entity\Advert');
-
-        $advert = $repository->find($id);
-
-        if (null === $advert) {
+        if ($advert === null) {
             throw new NotFoundHttpException('Aucune annonce ne correspond à cet Id : '.$id);
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $form = $this->get('form.factory')->create();
 
-        // On boucle sur les catégories de l'annonce pour les supprimer
-        foreach ($advert->getCategories() as $category) {
-            $advert->removeCategory($category);
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em->remove($advert);
+            $em->flush();
+            $this->addFlash('notice', 'L\'annonce a bien été supprimée.');
+            return $this->redirectToRoute('tests_platform');
         }
 
-        // On déclenche la modification
-        $em->flush();
-
-        return $this->render('TestsPlatformBundle:Advert:delete.html.twig', ['advert' => $advert]);
+        return $this->render('TestsPlatformBundle:Advert:delete.html.twig', [
+            'advert' => $advert,
+            'form' => $form->createView(),
+        ]);
     }
 
 

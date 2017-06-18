@@ -8,14 +8,18 @@
 
   <h3>Supprimer une annonce</h3>
 
-  {{ include("TestsPlatformBundle:Advert:form.html.twig") }}
-  {# Ici il faut créer un autre formulaire avec un bouton supprimer #}
-  <p>Vous êtes sur le point de supprimer l'annonce : {{ advert.title }} </p>
   <p>
+    Etes-vous certain de vouloir supprimer l'annonce "{{ advert.title }}" ?
+  </p>
+
+  <form action="{{ path('tests_platform_delete', {'id': advert.id}) }}" method="post">
     <a href="{{ path('tests_platform_view', {'id': advert.id}) }}" class="btn btn-default">
       <i class="glyphicon glyphicon-chevron-left"></i>
       Retour à l'annonce
     </a>
-  </p>
+    <input type="submit" value="Supprimer" class="btn btn-danger" />
+    {# Ceci va générer le champ CSRF #}
+    {{ form_rest(form) }}
+  </form>
 
 {% endblock %}
