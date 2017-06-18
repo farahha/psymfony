@@ -42,19 +42,29 @@
 
     <div class="form-group">
         <div class="col-sm">
-           {{ form_label(form.image, "Image", {'attr': {'class': 'form-control'}}) }}
+           {# form_label(form.image, "Image", {'attr': {'class': 'form-control'}}) #}
         </div>
+        {% if form.image.url is defined %}
         {{ form_label(form.image.url, "Lien de l'image", {'label_attr': {'class': 'form-horizontal'}}) }}
         {{ form_errors(form.image.url) }}
         <div class="col-sm">
             {{ form_widget(form.image.url, {'attr': {'class': 'form-control'}}) }}
         </div>
-
+        {% endif %}
+        {% if form.image.alt is defined %}
         {{ form_label(form.image.alt, "Alt - Si pas d'image", {'label_attr': {'class': 'form-horizontal'}}) }}
         {{ form_errors(form.image.alt) }}
 
         <div class="col-sm">
             {{ form_widget(form.image.alt, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {% endif %}
+        
+        {{ form_label(form.image.file, "Télécharger l'image", {'label_attr': {'class': 'form-horizontal'}}) }}
+        {{ form_errors(form.image.file) }}
+
+        <div class="col-sm">
+            {{ form_widget(form.image.file) }}
         </div>
 
         <div>
