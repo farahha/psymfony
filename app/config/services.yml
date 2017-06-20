@@ -12,7 +12,7 @@ services:
         class: Tests\PlatformBundle\Services\Email\ApplicationMailer
         arguments:
             - "@mailer"
-    # TODO : créer un service d'envoi de mails générique (Pas de application, advert ...)
+    # Créer un service d'envoi de mails générique (Pas de application, advert ...)
     tests_platform.services.email.advert_mailer:
         class: Tests\PlatformBundle\Services\Email\AdvertMailer
         arguments:
