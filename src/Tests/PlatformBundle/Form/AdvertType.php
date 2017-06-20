@@ -30,8 +30,8 @@ class AdvertType extends AbstractType
             ->add('title', TextType::class)
             ->add('author', TextType::class)
             ->add('content', TextareaType::class)
-            ->add('published', CheckboxType::class, ['required' => false])
-            ->add('image', ImageType::class)
+            ->add('published', CheckboxType::class, ['required' => false,])
+            ->add('image', ImageType::class, ['required' => false,])
 
             ->add('categories', EntityType::class, [
                     'class' => 'TestsPlatformBundle:Category',
