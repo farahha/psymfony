@@ -3,6 +3,7 @@
 namespace Tests\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -37,6 +38,14 @@ class Image
      */
     private $alt;
 
+
+    /**
+     * @Assert\File(
+     *      maxSize = "1024k",
+     *      mimeTypes = {"image/png", "image/jpg", "image/jpeg"},
+     *      mimeTypesMessage = "Merci de charger un fichier image (png, jpg, jpeg)"
+     * )
+     */
     private $file;
 
     private $tempFilename;
