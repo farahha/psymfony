@@ -6,18 +6,16 @@ use Tests\PlatformBundle\Entity\Advert;
 class AdvertMailer
 {
     private $mailer;
-    private $env;
 
-    public function __construct(\Swift_Mailer $mailer, $env)
+    public function __construct(\Swift_Mailer $mailer)
     {
         $this->mailer = $mailer;
-        $this->env = $env;
     }
 
     public function sendEmail(Advert $advert, $action = null)
     {
         $subject = 'Votre annonce - ' . $advert->getTitle();
-dump($this->env);
+
         switch ($action)
         {
             case 'postPersist': // Ajout
@@ -33,7 +31,7 @@ dump($this->env);
                 $body    = 'Bonjour, Votre annonce ('.$advert->getTitle().') a bien été enregistrée';
         }
 
-        $message = \Swift_Message::newInstance($subject, $body);
+        $message = new \Swift_Message($subject, $body);
 
         $message->addTo('kabyliXX@gmail.com', $advert->getAuthor());
         $message->addFrom('sofiane.sadoud@gmail.com', $advert->getAuthor());
