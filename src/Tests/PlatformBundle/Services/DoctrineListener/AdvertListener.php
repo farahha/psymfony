@@ -12,10 +12,12 @@ class AdvertListener
      * @var AdvertMailer
      */
     private $advertMailer;
+    private $env;
 
-    public function __construct(AdvertMailer $advertMailer)
+    public function __construct(AdvertMailer $advertMailer, $env)
     {
         $this->advertMailer = $advertMailer;
+        $this->env = $env;
     }
 
     public function postPersist(LifecycleEventArgs $args)
@@ -28,7 +30,7 @@ class AdvertListener
 
         try {
             $this->advertMailer->sendEmail($entity, __FUNCTION__);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             // Next time
         }
     }
@@ -43,7 +45,7 @@ class AdvertListener
 
         try {
             $this->advertMailer->sendEmail($entity, __FUNCTION__);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             // Next time
         }
     }
@@ -58,7 +60,7 @@ class AdvertListener
 
         try {
             $this->advertMailer->sendEmail($entity, __FUNCTION__);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             // Next time
         }
     }
@@ -73,7 +75,7 @@ class AdvertListener
 
         try {
             $this->advertMailer->sendEmail($entity, __FUNCTION__);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             // Next time
         }
     }
