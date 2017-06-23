@@ -182,14 +182,12 @@ class AdvertController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $rAdv = $em->getRepository('TestsPlatformBundle:Advert');
-        $rApp = $em->getRepository('TestsPlatformBundle:Application');
 
         $advert1 = $rAdv->findOneBy(['author' => 'kabyliXX']);
-        //$advert1->setAuthor('Nap');
 
         $application = new Application();
         $application->setAdvert($advert1);
-        $application->setAuthor('YYYYYY');
+        $application->setAuthor('Sofiane S');
         $application->setContent('Bonjour, Je suis intéressé par le poste que vous proposez.');
         $application->setDate(new \DateTime());
 
