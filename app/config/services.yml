@@ -27,6 +27,7 @@ services:
         class: Tests\PlatformBundle\Services\DoctrineListener\AdvertListener
         arguments:
             - "@tests_platform.services.email.advert_mailer"
+            - "%kernel.environment%"
         tags:
             - { name: doctrine.event_listener, event: postPersist, method: postPersist }
             - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Advert
@@ -463,5 +464,16 @@ class Advert
     public function getSkills()
     {
         return $this->skills;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function isContentValid(ExecutionContextInterface $context)
+    {
+        $forbiddenWords = ['démotivation', 'abandon'];
+        if (preg_match('#'.implode('|', $forbiddenWords).'#', $this->getContent())) {
+            $context->buildViolation('Contenu invalide car il contient un mot interdit')->atPath('content')->addViolation();
+        }
     }
 }

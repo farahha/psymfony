@@ -6,16 +6,18 @@ use Tests\PlatformBundle\Entity\Advert;
 class AdvertMailer
 {
     private $mailer;
+    private $env;
 
-    public function __construct(\Swift_Mailer $mailer)
+    public function __construct(\Swift_Mailer $mailer, $env)
     {
         $this->mailer = $mailer;
+        $this->env = $env;
     }
 
     public function sendEmail(Advert $advert, $action = null)
     {
         $subject = 'Votre annonce - ' . $advert->getTitle();
-
+dump($this->env);
         switch ($action)
         {
             case 'postPersist': // Ajout
