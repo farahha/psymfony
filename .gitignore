@@ -3,7 +3,7 @@
 /phpunit.xml
 /var/*
 !/var/cache
-!/.php_cs.cache
+/.php_cs.cache
 /var/cache/*
 !var/cache/.gitkeep
 !/var/logs
