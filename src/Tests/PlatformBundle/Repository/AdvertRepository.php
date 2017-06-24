@@ -26,11 +26,11 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getAdverts($page, $nbAdvertPerPage, $sets = null)
     {
-        $qb = $this->createQueryBuilder('advert')
+        $queryBuilder = $this->createQueryBuilder('advert')
             ->orderBy('advert.date', 'DESC');
 
         if (empty($sets)) {
-            $qb->leftJoin('advert.applications', 'app')
+            $queryBuilder->leftJoin('advert.applications', 'app')
                     ->addSelect('app')
                     ->leftJoin('advert.image', 'img')
                     ->addSelect('img')
@@ -40,27 +40,27 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
                     ->addSelect('skill');
         } else {
             if (!empty($sets['__embedded']['applications'])) {
-                $qb->leftJoin('advert.applications', 'app')
+                $queryBuilder->leftJoin('advert.applications', 'app')
                     ->addSelect('app');
             }
 
             if (!empty($sets['__embedded']['skills'])) {
-                $qb->leftJoin('advert.skills', 'skill')
+                $queryBuilder->leftJoin('advert.skills', 'skill')
                     ->addSelect('skill');
             }
 
             if (!empty($sets['__embedded']['image'])) {
-                $qb->leftJoin('advert.image', 'img')
+                $queryBuilder->leftJoin('advert.image', 'img')
                     ->addSelect('img');
             }
 
             if (!empty($sets['__embedded']['categories'])) {
-                $qb->leftJoin('advert.categories', 'cat')
+                $queryBuilder->leftJoin('advert.categories', 'cat')
                     ->addSelect('cat');
             }
         }
 
-        $query = $qb->getQuery();
+        $query = $queryBuilder->getQuery();
 
         // On défini le debut et la fin de l'intervalle de récupération
         $query->setFirstResult(($page - 1) * $nbAdvertPerPage)
@@ -75,11 +75,11 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getArrayAdverts($sets = null)
     {
-        $qb = $this->createQueryBuilder('advert')
+        $queryBuilder = $this->createQueryBuilder('advert')
         ->orderBy('advert.date', 'DESC');
 
         if (empty($sets)) {
-            $qb->leftJoin('advert.applications', 'app')
+            $queryBuilder->leftJoin('advert.applications', 'app')
             ->addSelect('app')
             ->leftJoin('advert.image', 'img')
             ->addSelect('img')
@@ -89,27 +89,27 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('skill');
         } else {
             if (!empty($sets['__embedded']['applications'])) {
-                $qb->leftJoin('advert.applications', 'app')
+                $queryBuilder->leftJoin('advert.applications', 'app')
                 ->addSelect('app');
             }
 
             if (!empty($sets['__embedded']['skills'])) {
-                $qb->leftJoin('advert.skills', 'skill')
+                $queryBuilder->leftJoin('advert.skills', 'skill')
                 ->addSelect('skill');
             }
 
             if (!empty($sets['__embedded']['image'])) {
-                $qb->leftJoin('advert.image', 'img')
+                $queryBuilder->leftJoin('advert.image', 'img')
                 ->addSelect('img');
             }
 
             if (!empty($sets['__embedded']['categories'])) {
-                $qb->leftJoin('advert.categories', 'cat')
+                $queryBuilder->leftJoin('advert.categories', 'cat')
                 ->addSelect('cat');
             }
         }
 
-        return $qb->getQuery()->getArrayResult();
+        return $queryBuilder->getQuery()->getArrayResult();
     }
 
     /**
@@ -118,9 +118,9 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getNbAdverts()
     {
-        $qb = $this->createQueryBuilder('advert')->select('count(advert)');
+        $queryBuilder = $this->createQueryBuilder('advert')->select('count(advert)');
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -143,10 +143,10 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
 
     public function getAdvertsWithoutApplications($days)
     {
-        $qb = $this->createQueryBuilder('advert')
+        $queryBuilder = $this->createQueryBuilder('advert')
                 ->leftJoin('advert.applications', 'app');
 
-        $this->whereNoApplications($qb);
+        $this->whereNoApplications($queryBuilder);
 
         $date = new \DateTime();
         $date->sub(new \DateInterval('P'.(int)$days.'D'));
@@ -156,68 +156,68 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         // Je choisi de me baser sur la date de création sinon, il faut que je modifie mon entité Advert
         // Pour seter la date mise à jour en même temps que la date de création :/
 
-        // $this->whereUpdated($qb, $date, self::CONDITION_LOWER_THAN);
+        // $this->whereUpdated($queryBuilder, $date, self::CONDITION_LOWER_THAN);
 
-        $this->whereDate($qb, $date, self::CONDITION_LOWER_THAN);
+        $this->whereDate($queryBuilder, $date, self::CONDITION_LOWER_THAN);
 
-        return $qb->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
-    public function whereNoApplications(QueryBuilder $qb)
+    public function whereNoApplications(QueryBuilder $queryBuilder)
     {
-        $qb->andWhere('app.id IS NULL');
-        // $qb->andWhere('app.id IS EMPTY'); // => Ne marche pas
-        // $qb->andWhere('app.id = :empty')->setParameter('empty', serialize([])); // => Ne marche pas
+        $queryBuilder->andWhere('app.id IS NULL');
+        // $queryBuilder->andWhere('app.id IS EMPTY'); // => Ne marche pas
+        // $queryBuilder->andWhere('app.id = :empty')->setParameter('empty', serialize([])); // => Ne marche pas
     }
 
-    public function whereDate(QueryBuilder $qb, $date, $condition = self::CONDITION_EQUAL_TO)
-    {
-        switch ($condition) {
-            case self::CONDITION_EQUAL_TO:
-                $qb->andWhere('advert.date = :date');
-                break;
-            case self::CONDITION_GREATER_THAN:
-                $qb->andWhere('advert.date > :date');
-                break;
-            case self::CONDITION_LOWER_THAN:
-                $qb->andWhere('advert.date < :date');
-                break;
-            case self::CONDITION_GREATER_THAN | self::CONDITION_EQUAL_TO:
-                $qb->andWhere('advert.date >= :date');
-                break;
-            case self::CONDITION_LOWER_THAN | self::CONDITION_EQUAL_TO:
-                $qb->andWhere('advert.date <= :date');
-                break;
-            default:
-                $qb->andWhere('advert.date = :date');
-        }
-
-        $qb->setParameter('date', $date);
-    }
-
-    public function whereUpdated(QueryBuilder $qb, $date, $condition = self::CONDITION_EQUAL_TO)
+    public function whereDate(QueryBuilder $queryBuilder, $date, $condition = self::CONDITION_EQUAL_TO)
     {
         switch ($condition) {
             case self::CONDITION_EQUAL_TO:
-                $qb->andWhere('advert.updated = :updated');
+                $queryBuilder->andWhere('advert.date = :date');
                 break;
             case self::CONDITION_GREATER_THAN:
-                $qb->andWhere('advert.updated > :updated');
+                $queryBuilder->andWhere('advert.date > :date');
                 break;
             case self::CONDITION_LOWER_THAN:
-                $qb->andWhere('advert.updated < :updated');
+                $queryBuilder->andWhere('advert.date < :date');
                 break;
             case self::CONDITION_GREATER_THAN | self::CONDITION_EQUAL_TO:
-                $qb->andWhere('advert.updated >= :updated');
+                $queryBuilder->andWhere('advert.date >= :date');
                 break;
             case self::CONDITION_LOWER_THAN | self::CONDITION_EQUAL_TO:
-                $qb->andWhere('advert.updated <= :updated');
+                $queryBuilder->andWhere('advert.date <= :date');
                 break;
             default:
-                $qb->andWhere('advert.updated = :updated');
+                $queryBuilder->andWhere('advert.date = :date');
         }
 
-        $qb->setParameter('updated', $date);
+        $queryBuilder->setParameter('date', $date);
+    }
+
+    public function whereUpdated(QueryBuilder $queryBuilder, $date, $condition = self::CONDITION_EQUAL_TO)
+    {
+        switch ($condition) {
+            case self::CONDITION_EQUAL_TO:
+                $queryBuilder->andWhere('advert.updated = :updated');
+                break;
+            case self::CONDITION_GREATER_THAN:
+                $queryBuilder->andWhere('advert.updated > :updated');
+                break;
+            case self::CONDITION_LOWER_THAN:
+                $queryBuilder->andWhere('advert.updated < :updated');
+                break;
+            case self::CONDITION_GREATER_THAN | self::CONDITION_EQUAL_TO:
+                $queryBuilder->andWhere('advert.updated >= :updated');
+                break;
+            case self::CONDITION_LOWER_THAN | self::CONDITION_EQUAL_TO:
+                $queryBuilder->andWhere('advert.updated <= :updated');
+                break;
+            default:
+                $queryBuilder->andWhere('advert.updated = :updated');
+        }
+
+        $queryBuilder->setParameter('updated', $date);
     }
 
     public function myFindAll()
@@ -276,9 +276,9 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function whereCurrentYear(QueryBuilder $qb)
+    public function whereCurrentYear(QueryBuilder $queryBuilder)
     {
-        $qb->andWhere('a.date BETWEEN :start AND :end')
+        $queryBuilder->andWhere('a.date BETWEEN :start AND :end')
         ->setParameter('start', new \DateTime(date('Y').'-01-01'))
         ->setParameter('end', new \DateTime(date('Y').'-12-31'));
     }
