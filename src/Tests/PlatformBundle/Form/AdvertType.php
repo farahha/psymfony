@@ -52,9 +52,10 @@ class AdvertType extends AbstractType
 
             if (!$advert->getPublished() || $advert->getId() === null) {
                 $event->getForm()->add('published', CheckboxType::class, ['required' => false]);
-            } else {
-                $event->getForm()->remove('published');
+                return;
             }
+
+            $event->getForm()->remove('published');
         }
         );
     }
