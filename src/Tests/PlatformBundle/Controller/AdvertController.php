@@ -101,7 +101,7 @@ class AdvertController extends Controller
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $entityManager->flush();
             $this->addFlash('notice', 'L\'annonce a bien été mise à jour.');
-            return $this->redirectToRoute('tests_platform_view', array('id' => $advert->getId()));
+            return $this->redirectToRoute('tests_platform_view', array('advertId' => $advert->getId()));
         }
 
         return $this->render('TestsPlatformBundle:Advert:edit.html.twig',

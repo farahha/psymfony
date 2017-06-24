@@ -13,11 +13,11 @@ tests_platform:
         page: \d*
 
 tests_platform_view:
-    path:     /advert/{id}
+    path:     /advert/{advertId}
     defaults:
         _controller: TestsPlatformBundle:Advert:view
     requirements:
-        id:  \d+
+        advertId:  \d+
 
 tests_platform_add:
     path:     /add
@@ -30,18 +30,18 @@ tests_platform_test:
         _controller: TestsPlatformBundle:Advert:test
 
 tests_platform_edit:
-    path:     /edit/{id}
+    path:     /edit/{advertId}
     defaults:
         _controller: TestsPlatformBundle:Advert:edit
     requirements:
-        id: \d+
+        advertId: \d+
 
 tests_platform_delete:
-    path:     /delete/{id}
+    path:     /delete/{advertId}
     defaults:
         _controller: TestsPlatformBundle:Advert:delete
     requirements:
-        id: \d+
+        advertId: \d+
 tests_platform_purge:
     path:   /purge/{days}
     defaults:

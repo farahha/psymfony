@@ -12,8 +12,8 @@
     Etes-vous certain de vouloir supprimer l'annonce "{{ advert.title }}" ?
   </p>
 
-  <form action="{{ path('tests_platform_delete', {'id': advert.id}) }}" method="post">
-    <a href="{{ path('tests_platform_view', {'id': advert.id}) }}" class="btn btn-default">
+  <form action="{{ path('tests_platform_delete', {'advertId': advert.id}) }}" method="post">
+    <a href="{{ path('tests_platform_view', {'advertId': advert.id}) }}" class="btn btn-default">
       <i class="glyphicon glyphicon-chevron-left"></i>
       Retour à l'annonce
     </a>
