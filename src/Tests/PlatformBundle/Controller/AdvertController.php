@@ -68,9 +68,9 @@ class AdvertController extends Controller
         $form = $this->createForm(AdvertType::class, $advert);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($advert);
-            $em->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($advert);
+            $entityManager->flush();
 
             $this->addFlash('notice', 'Annonce bien enregistrée.');
 
@@ -82,24 +82,24 @@ class AdvertController extends Controller
         ));
     }
 
-    public function editAction($id, Request $request)
+    public function editAction($advertId, Request $request)
     {
-        if (empty($id)) {
+        if (empty($advertId)) {
             throw new NotFoundHttpException("Pas d'id de renseigné.");
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager();
 
-        $advert = $em->getRepository('Tests\PlatformBundle\Entity\Advert')->find($id);
+        $advert = $entityManager->getRepository('Tests\PlatformBundle\Entity\Advert')->find($advertId);
 
         if ($advert === null) {
-            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+            throw new NotFoundHttpException("L'annonce d'id ".$advertId." n'existe pas.");
         }
 
         $form = $this->createForm(AdvertEditType::class, $advert);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            $em->flush();
+            $entityManager->flush();
             $this->addFlash('notice', 'L\'annonce a bien été mise à jour.');
             return $this->redirectToRoute('tests_platform_view', array('id' => $advert->getId()));
         }
@@ -112,23 +112,23 @@ class AdvertController extends Controller
         );
     }
 
-    public function deleteAction($id, Request $request)
+    public function deleteAction($advertId, Request $request)
     {
-        if (empty($id)) {
+        if (empty($advertId)) {
             throw new NotFoundHttpException("Empty advert ID");
         }
-        $em = $this->getDoctrine()->getManager();
-        $advert = $em->getRepository('Tests\PlatformBundle\Entity\Advert')->find($id);
+        $entityManager = $this->getDoctrine()->getManager();
+        $advert = $entityManager->getRepository('Tests\PlatformBundle\Entity\Advert')->find($advertId);
 
         if ($advert === null) {
-            throw new NotFoundHttpException('Aucune annonce ne correspond à cet Id : '.$id);
+            throw new NotFoundHttpException('Aucune annonce ne correspond à cet Id : '.$advertId);
         }
 
         $form = $this->get('form.factory')->create();
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            $em->remove($advert);
-            $em->flush();
+            $entityManager->remove($advert);
+            $entityManager->flush();
             $this->addFlash('notice', 'L\'annonce a bien été supprimée.');
             return $this->redirectToRoute('tests_platform');
         }
@@ -140,15 +140,15 @@ class AdvertController extends Controller
     }
 
 
-    public function viewAction($id)
+    public function viewAction($advertId)
     {
         // On récupère le repo de Advert Entity
         $repository = $this->getDoctrine()->getManager()->getRepository('TestsPlatformBundle:Advert');
 
-        $advert = $repository->find($id);
+        $advert = $repository->find($advertId);
 
         if (null === $advert) {
-            throw new NotFoundHttpException("L'id de l'annonce $id n'existe pas");
+            throw new NotFoundHttpException("L'id de l'annonce $advertId n'existe pas");
         }
 
         // On récupère la liste des candidatures
@@ -180,8 +180,8 @@ class AdvertController extends Controller
 
     public function testAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $rAdv = $em->getRepository('TestsPlatformBundle:Advert');
+        $entityManager = $this->getDoctrine()->getManager();
+        $rAdv = $entityManager->getRepository('TestsPlatformBundle:Advert');
 
         $advert1 = $rAdv->findOneBy(['author' => 'kabyliXX']);
 
@@ -192,10 +192,10 @@ class AdvertController extends Controller
         $application->setDate(new \DateTime());
 
 
-        $em->persist($advert1);
-        $em->persist($application);
+        $entityManager->persist($advert1);
+        $entityManager->persist($application);
 
-        $em->flush();
+        $entityManager->flush();
 
         $listAdverts = $rAdv->myFindAll();
         return $this->render('TestsPlatformBundle:Advert:index.html.twig', [
