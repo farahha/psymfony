@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Advert
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * @ORM\Table(name="adverts")
  * @ORM\Entity(repositoryClass="Tests\PlatformBundle\Repository\AdvertRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields="title", message="Une annonce existe déjà avec ce titre")
  */
 class Advert
 {
@@ -58,7 +60,7 @@ class Advert
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, unique=true)
      * @Assert\Length(min=10, minMessage="Minimum 10 caractères")
      */
     private $title;
@@ -473,7 +475,9 @@ class Advert
     {
         $forbiddenWords = ['démotivation', 'abandon'];
         if (preg_match('#'.implode('|', $forbiddenWords).'#', $this->getContent())) {
-            $context->buildViolation('Contenu invalide car il contient un mot interdit')->atPath('content')->addViolation();
+            $context->buildViolation('Contenu invalide car il contient un mot interdit')
+            ->atPath('content')
+            ->addViolation();
         }
     }
 }
