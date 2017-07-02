@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Tests\PlatformBundle\Validator\AntiFlood;
 
 /**
  * Advert
@@ -78,6 +79,7 @@ class Advert
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      * @Assert\NotBlank()
+     * @AntiFlood(message="Merci de decrire d'avantage votre annonce.")
      */
     private $content;
 
