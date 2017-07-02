@@ -74,7 +74,7 @@ class AdvertController extends Controller
 
             $this->addFlash('notice', 'Annonce bien enregistrée.');
 
-            return $this->redirectToRoute('tests_platform_view', array('id' => $advert->getId()));
+            return $this->redirectToRoute('tests_platform_view', array('advertId' => $advert->getId()));
         }
 
         return $this->render('TestsPlatformBundle:Advert:add.html.twig', array(
