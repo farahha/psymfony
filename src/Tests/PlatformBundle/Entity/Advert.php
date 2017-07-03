@@ -32,7 +32,7 @@ class Advert
     private $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Tests\PlatformBundle\Entity\Application", mappedBy="advert")
+     * @ORM\OneToMany(targetEntity="Tests\PlatformBundle\Entity\Application", mappedBy="advert", cascade={"remove"})
      */
     private $applications;
 
@@ -79,7 +79,7 @@ class Advert
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      * @Assert\NotBlank()
-     * @AntiFlood(message="Merci de decrire d'avantage votre annonce.")
+     * @AntiFlood()
      */
     private $content;
 
@@ -113,6 +113,13 @@ class Advert
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
      */
     private $slug;
+
+    /**
+     *
+     * @var string
+     * @ORM\Column(name="ip_address", type="string", length=20)
+     */
+    private $advertIpAddress;
 
     public function __construct()
     {
@@ -481,5 +488,29 @@ class Advert
             ->atPath('content')
             ->addViolation();
         }
+    }
+
+    /**
+     * Set advertIpAddress
+     *
+     * @param string $advertIpAddress
+     *
+     * @return Advert
+     */
+    public function setAdvertIpAddress($advertIpAddress)
+    {
+        $this->advertIpAddress = $advertIpAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get advertIpAddress
+     *
+     * @return string
+     */
+    public function getAdvertIpAddress()
+    {
+        return $this->advertIpAddress;
     }
 }

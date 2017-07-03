@@ -186,28 +186,4 @@ class Application
     {
         $this->advert->decreaseNbApplications();
     }
-
-    /**
-     * Set ipAddress
-     *
-     * @param string $ipAddress
-     *
-     * @return Application
-     */
-    public function setIpAddress($ipAddress)
-    {
-        $this->ipAddress = $ipAddress;
-
-        return $this;
-    }
-
-    /**
-     * Get ipAddress
-     *
-     * @return string
-     */
-    public function getIpAddress()
-    {
-        return $this->ipAddress;
-    }
 }

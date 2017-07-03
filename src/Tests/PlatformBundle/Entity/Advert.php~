@@ -4,6 +4,11 @@ namespace Tests\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Tests\PlatformBundle\Validator\AntiFlood;
 
 /**
  * Advert
@@ -11,11 +16,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="adverts")
  * @ORM\Entity(repositoryClass="Tests\PlatformBundle\Repository\AdvertRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields="title", message="Une annonce existe déjà avec ce titre")
  */
 class Advert
 {
     /**
-    * @ORM\OneToOne(targetEntity="Tests\PlatformBundle\Entity\Image", cascade={"persist"})
+    * @ORM\OneToOne(targetEntity="Tests\PlatformBundle\Entity\Image", cascade={"persist", "remove"})
+    * @Assert\Valid()
     */
     private $image;
 
@@ -25,9 +32,14 @@ class Advert
     private $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Tests\PlatformBundle\Entity\Application", mappedBy="advert")
+     * @ORM\OneToMany(targetEntity="Tests\PlatformBundle\Entity\Application", mappedBy="advert", cascade={"remove"})
      */
     private $applications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Tests\PlatformBundle\Entity\AdvertSkill", mappedBy="advert", cascade={"remove"})
+     */
+    private $skills;
 
     /**
      * @var int
@@ -42,13 +54,15 @@ class Advert
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
+     * @Assert\DateTime()
      */
     private $date;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, unique=true)
+     * @Assert\Length(min=10, minMessage="Minimum 10 caractères")
      */
     private $title;
 
@@ -56,6 +70,7 @@ class Advert
      * @var string
      *
      * @ORM\Column(name="author", type="string", length=255)
+     * @Assert\Length(min=2, minMessage="Minimum 2 caractères")
      */
     private $author;
 
@@ -63,6 +78,8 @@ class Advert
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=true)
+     * @Assert\NotBlank()
+     * @AntiFlood()
      */
     private $content;
 
@@ -97,9 +114,18 @@ class Advert
      */
     private $slug;
 
+    /**
+     *
+     * @var string
+     * @ORM\Column(name="ip_address", type="string", length=20)
+     */
+    private $advertIpAddress;
+
     public function __construct()
     {
         $this->date = new \DateTime();
+        $this->categories = new ArrayCollection();
+        $this->applications = new ArrayCollection();
     }
 
     /**
@@ -367,5 +393,100 @@ class Advert
     public function decreaseNbApplications()
     {
         $this->nbApplications--;
+    }
+
+    /**
+     * Set nbApplications
+     *
+     * @param integer $nbApplications
+     *
+     * @return Advert
+     */
+    public function setNbApplications($nbApplications)
+    {
+        $this->nbApplications = $nbApplications;
+
+        return $this;
+    }
+
+    /**
+     * Get nbApplications
+     *
+     * @return integer
+     */
+    public function getNbApplications()
+    {
+        return $this->nbApplications;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Advert
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Add skill
+     *
+     * @param \Tests\PlatformBundle\Entity\AdvertSkill $skill
+     *
+     * @return Advert
+     */
+    public function addSkill(\Tests\PlatformBundle\Entity\AdvertSkill $skill)
+    {
+        $this->skills[] = $skill;
+
+        return $this;
+    }
+
+    /**
+     * Remove skill
+     *
+     * @param \Tests\PlatformBundle\Entity\AdvertSkill $skill
+     */
+    public function removeSkill(\Tests\PlatformBundle\Entity\AdvertSkill $skill)
+    {
+        $this->skills->removeElement($skill);
+    }
+
+    /**
+     * Get skills
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSkills()
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function isContentValid(ExecutionContextInterface $context)
+    {
+        $forbiddenWords = ['démotivation', 'abandon'];
+        if (preg_match('#'.implode('|', $forbiddenWords).'#', $this->getContent())) {
+            $context->buildViolation('Contenu invalide car il contient un mot interdit')
+            ->atPath('content')
+            ->addViolation();
+        }
     }
 }
