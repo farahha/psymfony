@@ -14,20 +14,22 @@ class AdvertMailer
 
     public function sendEmail(Advert $advert, $action = null)
     {
-        $subject = 'Votre annonce - ' . $advert->getTitle();
-
         switch ($action)
         {
             case 'postPersist': // Ajout
+                $subject = 'Création de votre annonce - ' . $advert->getTitle();
                 $body    = 'Bonjour, Votre annonce ('.$advert->getTitle().') a bien été enregistrée et sera prochainement mise en ligne.';
                 break;
             case 'postUpdate': // Après modification
+                $subject = 'Modification de votre annonce - ' . $advert->getTitle();
                 $body    = 'Bonjour, Votre annonce ('.$advert->getTitle().') a bien été modifiée.';
                 break;
-            case 'preRemove': // Suppression
+            case 'preRemove': // avant Suppression
+                $subject = 'Suppression de votre annonce - ' . $advert->getTitle();
                 $body    = 'Bonjour, Votre annonce ('.$advert->getTitle().') a bien été supprimée et ne sera plus accessible prochainement';
                 break;
             default:
+                $subject = 'Votre annonce - ' . $advert->getTitle();
                 $body    = 'Bonjour, Votre annonce ('.$advert->getTitle().') a bien été enregistrée';
         }
 
