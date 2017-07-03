@@ -28,7 +28,7 @@ class ApplicationCreationListener
 
         try {
             $this->applicationMailer->sendEmail($entity);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             // Next time
         }
     }

@@ -14,8 +14,7 @@ class AdvertMailer
 
     public function sendEmail(Advert $advert, $action = null)
     {
-        switch ($action)
-        {
+        switch ($action) {
             case 'postPersist': // Ajout
                 $subject = 'Création de votre annonce - ' . $advert->getTitle();
                 $body    = 'Bonjour, Votre annonce ('.$advert->getTitle().') a bien été enregistrée et sera prochainement mise en ligne.';

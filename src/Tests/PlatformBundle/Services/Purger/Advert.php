@@ -22,7 +22,6 @@ class Advert
      */
     public function purge($days)
     {
-
         if (empty($days)) {
             $this->logger->warning('Purge : Lancement de la fonction purge avec un paramètre days null');
             return;

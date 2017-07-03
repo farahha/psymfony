@@ -34,6 +34,4 @@ class CategoryType extends AbstractType
     {
         return 'tests_platformbundle_category';
     }
-
-
 }
