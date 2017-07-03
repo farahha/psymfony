@@ -79,3 +79,8 @@ ALTER TABLE adverts ADD nb_applications INT NOT NULL,
 -- Ajout d'un slug
 ALTER TABLE adverts ADD slug VARCHAR(255) NOT NULL;
 CREATE UNIQUE INDEX UNIQ_8C88E777989D9B62 ON adverts (slug);
+
+-- Ajout de l'adresse ip à la candidature (application)
+ALTER TABLE applications ADD ip_address VARCHAR(20) NOT NULL;
+ALTER TABLE adverts ADD ip_address VARCHAR(20) NOT NULL;
+
