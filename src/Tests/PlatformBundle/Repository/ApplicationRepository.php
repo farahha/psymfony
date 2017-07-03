@@ -23,4 +23,19 @@ class ApplicationRepository extends \Doctrine\ORM\EntityRepository
                 ->getResult()
         ;
     }
+
+    public function isFlood($ipAddress, $since = 15)
+    {
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('PT'.(int)$since.'S'));
+
+        $queryBuilder = $this->createQueryBuilder('app')->where('app.date > :date');
+        $queryBuilder->setParameter('date', $date);
+        $queryBuilder->andWhere('app.ipAddress = :ip')->setParameter('ip', $ipAddress);
+
+        return $queryBuilder
+        ->getQuery()
+        ->getResult()
+        ;
+    }
 }
