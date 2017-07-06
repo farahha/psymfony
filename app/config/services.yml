@@ -21,17 +21,22 @@ services:
         class: Tests\PlatformBundle\Services\DoctrineListener\ApplicationCreationListener
         arguments:
             - "@tests_platform.services.email.application_mailer"
+            - "@request_stack"
+            - "%kernel.environment%"
         tags:
-            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postPersist, method: postPersist }
+            - { name: doctrine.event_listener, event: prePersist, method: prePersist }
     tests_platform.services.doctrine_listener.advert:
         class: Tests\PlatformBundle\Services\DoctrineListener\AdvertListener
         arguments:
             - "@tests_platform.services.email.advert_mailer"
+            - "@request_stack"
             - "%kernel.environment%"
         tags:
             - { name: doctrine.event_listener, event: postPersist, method: postPersist }
             - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
             - { name: doctrine.event_listener, event: preRemove, method: preRemove }
+            - { name: doctrine.event_listener, event: prePersist, method: prePersist }
     # Service pour le TP3
     tests_platform.services.purger.advert:
         class: Tests\PlatformBundle\Services\Purger\Advert

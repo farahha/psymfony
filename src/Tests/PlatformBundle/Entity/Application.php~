@@ -56,7 +56,7 @@ class Application
      *
      * @ORM\Column(name="ip_address", type="string", length=20)
      */
-    private $ipAddress;
+    private $aplicationIpAddress;
 
     public function __construct()
     {
@@ -186,4 +186,5 @@ class Application
     {
         $this->advert->decreaseNbApplications();
     }
+
 }

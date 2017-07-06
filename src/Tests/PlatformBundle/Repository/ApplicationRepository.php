@@ -31,7 +31,7 @@ class ApplicationRepository extends \Doctrine\ORM\EntityRepository
 
         $queryBuilder = $this->createQueryBuilder('app')->where('app.date > :date');
         $queryBuilder->setParameter('date', $date);
-        $queryBuilder->andWhere('app.ipAddress = :ip')->setParameter('ip', $ipAddress);
+        $queryBuilder->andWhere('app.applicationIpAddress = :ip')->setParameter('ip', $ipAddress);
 
         return $queryBuilder
         ->getQuery()

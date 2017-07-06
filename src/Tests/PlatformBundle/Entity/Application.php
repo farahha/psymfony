@@ -56,7 +56,7 @@ class Application
      *
      * @ORM\Column(name="ip_address", type="string", length=20)
      */
-    private $ipAddress;
+    private $applicationIpAddress;
 
     public function __construct()
     {
@@ -187,27 +187,28 @@ class Application
         $this->advert->decreaseNbApplications();
     }
 
+
     /**
-     * Set ipAddress
+     * Set applicationIpAddress
      *
-     * @param string $ipAddress
+     * @param string $applicationIpAddress
      *
      * @return Application
      */
-    public function setIpAddress($ipAddress)
+    public function setApplicationIpAddress($applicationIpAddress)
     {
-        $this->ipAddress = $ipAddress;
+        $this->applicationIpAddress = $applicationIpAddress;
 
         return $this;
     }
 
     /**
-     * Get ipAddress
+     * Get applicationIpAddress
      *
      * @return string
      */
-    public function getIpAddress()
+    public function getApplicationIpAddress()
     {
-        return $this->ipAddress;
+        return $this->applicationIpAddress;
     }
 }
