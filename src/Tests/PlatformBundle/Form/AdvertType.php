@@ -22,11 +22,11 @@ class AdvertType extends AbstractType
         $pattern = 'D%';
 
         $builder
-            ->add('date', DateTimeType::class, [
+            //->add('date', DateTimeType::class, [
                 //'widget' => 'single_text',
                 //'html5' => false,
                 //'format' => 'dd-MM-yyyy',
-            ])
+            //])
             ->add('title', TextType::class)
             ->add('author', TextType::class)
             ->add('content', TextareaType::class)
