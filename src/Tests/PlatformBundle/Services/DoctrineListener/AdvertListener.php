@@ -79,9 +79,12 @@ class AdvertListener
         }
 
         $request = $this->requestStack->getCurrentRequest();
+
         // TODO : Filtrer uniquement sur les mise a jour venant de l'action update ...
-        //$uri = $request->getUri();
-        //dump($uri);
+        $uri = $request->getUri();
+        if (!preg_match('/\/platform\/edit\/[0-9]./', $uri)) {
+            return;
+        }
 
         try {
             $this->advertMailer->sendEmail($entity, __FUNCTION__);
