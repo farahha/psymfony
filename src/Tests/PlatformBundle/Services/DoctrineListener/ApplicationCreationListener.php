@@ -25,6 +25,10 @@ class ApplicationCreationListener
 
     public function postPersist(LifecycleEventArgs $args)
     {
+        if ($this->env === 'dev') {
+            return;
+        }
+
         $entity = $args->getObject();
 
         if (!$entity instanceof Application) {
@@ -48,6 +52,6 @@ class ApplicationCreationListener
 
         $request = $this->requestStack->getCurrentRequest();
         $ip = $request->getClientIp();
-        $entity->setAplicationIpAddress($ip);
+        $entity->setApplicationIpAddress($ip);
     }
 }
