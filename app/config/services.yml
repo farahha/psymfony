@@ -2,34 +2,34 @@ parameters:
 #    parameter_name: value
 
 services:
-    tests_platform.services.antispam:
-        class: Tests\PlatformBundle\Services\AntiSpam\AntiSpam
+    library_platform.services.antispam:
+        class: Library\PlatformBundle\Services\AntiSpam\AntiSpam
         arguments:
             - "@mailer"
             - "%locale%"
             - 100
-    tests_platform.services.email.application_mailer:
-        class: Tests\PlatformBundle\Services\Email\ApplicationMailer
+    library_platform.services.email.application_mailer:
+        class: Library\PlatformBundle\Services\Email\ApplicationMailer
         arguments:
             - "@mailer"
     # Créer un service d'envoi de mails générique (Pas de application, advert ...)
-    tests_platform.services.email.advert_mailer:
-        class: Tests\PlatformBundle\Services\Email\AdvertMailer
+    library_platform.services.email.advert_mailer:
+        class: Library\PlatformBundle\Services\Email\AdvertMailer
         arguments:
             - "@mailer"
-    tests_platform.services.doctrine_listener.application_creation:
-        class: Tests\PlatformBundle\Services\DoctrineListener\ApplicationCreationListener
+    library_platform.services.doctrine_listener.application_creation:
+        class: Library\PlatformBundle\Services\DoctrineListener\ApplicationCreationListener
         arguments:
-            - "@tests_platform.services.email.application_mailer"
+            - "@library_platform.services.email.application_mailer"
             - "@request_stack"
             - "%kernel.environment%"
         tags:
             - { name: doctrine.event_listener, event: postPersist, method: postPersist }
             - { name: doctrine.event_listener, event: prePersist, method: prePersist }
-    tests_platform.services.doctrine_listener.advert:
-        class: Tests\PlatformBundle\Services\DoctrineListener\AdvertListener
+    library_platform.services.doctrine_listener.advert:
+        class: Library\PlatformBundle\Services\DoctrineListener\AdvertListener
         arguments:
-            - "@tests_platform.services.email.advert_mailer"
+            - "@library_platform.services.email.advert_mailer"
             - "@request_stack"
             - "%kernel.environment%"
         tags:
@@ -38,8 +38,8 @@ services:
             - { name: doctrine.event_listener, event: preRemove, method: preRemove }
             - { name: doctrine.event_listener, event: prePersist, method: prePersist }
     # Service pour le TP3
-    tests_platform.services.purger.advert:
-        class: Tests\PlatformBundle\Services\Purger\Advert
+    library_platform.services.purger.advert:
+        class: Library\PlatformBundle\Services\Purger\Advert
         arguments:
             - "@doctrine.orm.default_entity_manager"
             - "@monolog.logger"

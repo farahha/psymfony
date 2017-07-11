@@ -1,0 +1,25 @@
+{% extends "LibraryPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Supprimer une annonce - {{ parent() }}
+{% endblock %}
+
+{% block libraryplatform_body %}
+
+  <h3>Supprimer une annonce</h3>
+
+  <p>
+    Etes-vous certain de vouloir supprimer l'annonce "{{ advert.title }}" ?
+  </p>
+
+  <form action="{{ path('library_platform_delete', {'advertId': advert.id}) }}" method="post">
+    <a href="{{ path('library_platform_view', {'advertId': advert.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à l'annonce
+    </a>
+    <input type="submit" value="Supprimer" class="btn btn-danger" />
+    {# Ceci va générer le champ CSRF #}
+    {{ form_rest(form) }}
+  </form>
+
+{% endblock %}

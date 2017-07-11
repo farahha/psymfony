@@ -1,0 +1,23 @@
+{# src/Library/PlatformBundle/Resources/views/Advert/index.html.twig #}
+
+{% extends "LibraryPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Rapport annonce purgées - {{ parent() }}
+{% endblock %}
+
+{% block libraryplatform_body %}
+{% for message in app.session.flashbag.get('info') %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% if nbPurgedAdverts != 0 %}
+<p># <b>{{ nbPurgedAdverts }}</b> annonces créées avant le <b>{{ date|date("d-m-Y à h:m:i") }}</b> et n'ayant pas reçu de candidatures ont été supprimées.</p>
+{% endif %}
+
+{% if test is defined and test != null %}
+{{ dump(test) }}
+{% endif %}
+{% endblock %}

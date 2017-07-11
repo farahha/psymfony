@@ -1,8 +1,0 @@
-services:
-    tests_platform.validator.anti_flood:
-        class: Tests\PlatformBundle\Validator\AntiFloodValidator
-        arguments:
-            - "@request_stack"
-            - "@doctrine.orm.entity_manager"
-        tags:
-            - { name: validator.constraint_validator, alias: tests_platform_antiflood }

@@ -1,0 +1,23 @@
+{% extends "LibraryPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  modifier l'annonce - {{ parent() }}
+{% endblock %}
+
+{% block libraryplatform_body %}
+
+    {% for message in app.session.flashbag.get('info') %}
+        <div class="alert alert-info">
+            {{ message }}
+        </div>
+    {% endfor %}
+  {{ include("LibraryPlatformBundle:Advert:form.html.twig") }}
+
+  <p>
+    <a href="{{ path('library_platform') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour
+    </a>
+  </p>
+
+{% endblock %}

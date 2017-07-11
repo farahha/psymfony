@@ -1,0 +1,50 @@
+# Fichier de mapping : route-controller-action
+# hello_the_word : est le nom de la route. Il sert juste a donner un nom
+# path : est l'url
+# default : pour spécifier les paramètres de la route.
+# _controller : Bundle:Controller:Action
+# "resource", "type", "prefix", "path", "host", "schemes", "methods", "defaults", "requirements", "options", "condition" sont les paramètres acceptés dans la définition de la route
+library_platform:
+    path:     /{page}
+    defaults:
+        _controller: LibraryPlatformBundle:Advert:index
+        page: 1
+    requirements:
+        page: \d*
+
+library_platform_view:
+    path:     /advert/{advertId}
+    defaults:
+        _controller: LibraryPlatformBundle:Advert:view
+    requirements:
+        advertId:  \d+
+
+library_platform_add:
+    path:     /add
+    defaults:
+        _controller: LibraryPlatformBundle:Advert:add
+
+library_platform_test:
+    path:     /test
+    defaults:
+        _controller: LibraryPlatformBundle:Advert:test
+
+library_platform_edit:
+    path:     /edit/{advertId}
+    defaults:
+        _controller: LibraryPlatformBundle:Advert:edit
+    requirements:
+        advertId: \d+
+
+library_platform_delete:
+    path:     /delete/{advertId}
+    defaults:
+        _controller: LibraryPlatformBundle:Advert:delete
+    requirements:
+        advertId: \d+
+library_platform_purge:
+    path:   /purge/{days}
+    defaults:
+        _controller: LibraryPlatformBundle:Advert:purge
+    requirements:
+        days: \d+
