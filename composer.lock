@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f34d5e03f8cc3cab91a46fb5b16dcac",
+    "content-hash": "667663b63f133def9c855b215088c6ff",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -995,7 +995,7 @@
             "time": "2016-12-18T15:42:34+00:00"
         },
         {
-            "name": "fabpot/php-cs-fixer",
+            "name": "friendsofphp/php-cs-fixer",
             "version": "v2.3.2",
             "source": {
                 "type": "git",
@@ -1071,7 +1071,6 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "abandoned": "friendsofphp/php-cs-fixer",
             "time": "2017-05-24T21:59:38+00:00"
         },
         {
