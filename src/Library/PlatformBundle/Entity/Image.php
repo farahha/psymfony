@@ -187,7 +187,8 @@ class Image
 
     public function getUploadRootDir()
     {
-        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+        $reflectionClass = new \ReflectionClass(get_class($this));
+        return dirname($reflectionClass->getFileName()).'/../../../../web/'.$this->getUploadDir();
     }
 
     public function getWebPath()
