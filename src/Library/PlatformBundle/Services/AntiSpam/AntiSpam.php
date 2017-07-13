@@ -4,18 +4,21 @@ namespace Library\PlatformBundle\Services\AntiSpam;
 class AntiSpam
 {
     private $mailer;
-    private $locale;
     private $minLength;
 
-    public function __construct(\Swift_Mailer $mailer, $locale, $minLength)
+    public function __construct(\Swift_Mailer $mailer, $minLength)
     {
         $this->mailer = $mailer;
-        $this->locale = $locale;
         $this->minLength = (int) $minLength;
     }
 
     public function isSpam($text)
     {
-        return strlen($text) < $this->minLength; // Si le texte fait moins de minLength caractère on dit que c'est un spam
+        if (strlen($text) < $this->minLength) {
+            // Ici je peux imagner envoyer un mail d'alerte en utilisant mailer ...
+            return true;
+        }
+
+        return false;
     }
 }

@@ -6,7 +6,6 @@ services:
         class: Library\PlatformBundle\Services\AntiSpam\AntiSpam
         arguments:
             - "@mailer"
-            - "%locale%"
             - 100
     library_platform.services.email.application_mailer:
         class: Library\PlatformBundle\Services\Email\ApplicationMailer

@@ -127,13 +127,6 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         $date = new \DateTime();
         $date->sub(new \DateInterval('P'.(int)$days.'D'));
 
-        // c'est normalement ce qui est demandé, mais c'est pas logique car les annonces qui n'ont
-        // jamais été modifiées, ne seront jamais supprimées
-        // Je choisi de me baser sur la date de création sinon, il faut que je modifie mon entité Advert
-        // Pour seter la date mise à jour en même temps que la date de création :/
-
-        // $this->whereUpdated($queryBuilder, $date, self::CONDITION_LOWER_THAN);
-
         $this->whereDate($queryBuilder, $date, self::CONDITION_LOWER_THAN);
 
         return $queryBuilder->getQuery()->getResult();
@@ -142,8 +135,6 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
     public function whereNoApplications(QueryBuilder $queryBuilder)
     {
         $queryBuilder->andWhere('app.id IS NULL');
-        // $queryBuilder->andWhere('app.id IS EMPTY'); // => Ne marche pas
-        // $queryBuilder->andWhere('app.id = :empty')->setParameter('empty', serialize([])); // => Ne marche pas
     }
 
     public function whereDate(QueryBuilder $queryBuilder, $date, $condition = self::CONDITION_EQUAL_TO)
@@ -199,27 +190,15 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
     public function myFindAll()
     {
 
-        // le 'advert' peut être remplacé par n'importe quelle autre chaine de caractères, c'est juste un alias
-        // déjà, il est conseillé de mettre 'a' au lieu de 'advert', première lettre de l'entity
         $queryBuilder = $this->_em->createQueryBuilder()
             ->select('advert')
             ->from($this->_entityName, 'advert');
 
-        // on peut aussi construire le queryBuilder comme ceci
-        // $queryBuilder = $this->createQueryBuilder('advert');
-
-        // on récupère la requete
         $query = $queryBuilder->getQuery();
 
-        // On execute la requete pour recuperer le resultat
         $result = $query->getResult();
-        // Ou bien
-        //$result = $query->execute(null, $query::HYDRATE_OBJECT);
 
         return $result;
-
-        // En very short requete :)
-        // return $this->createQueryBuilder('advert')->getQuery()->getResult();
     }
 
     public function myFindOne($id)
