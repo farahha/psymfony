@@ -26,41 +26,7 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getAdverts($page, $nbAdvertPerPage, $sets = null)
     {
-        $queryBuilder = $this->createQueryBuilder('advert')
-            ->orderBy('advert.date', 'DESC');
-
-        if (empty($sets)) {
-            $queryBuilder->leftJoin('advert.applications', 'app')
-                    ->addSelect('app')
-                    ->leftJoin('advert.image', 'img')
-                    ->addSelect('img')
-                    ->leftJoin('advert.categories', 'cat')
-                    ->addSelect('cat')
-                    ->leftJoin('advert.skills', 'skill')
-                    ->addSelect('skill');
-        } else {
-            if (!empty($sets['__embedded']['applications'])) {
-                $queryBuilder->leftJoin('advert.applications', 'app')
-                    ->addSelect('app');
-            }
-
-            if (!empty($sets['__embedded']['skills'])) {
-                $queryBuilder->leftJoin('advert.skills', 'skill')
-                    ->addSelect('skill');
-            }
-
-            if (!empty($sets['__embedded']['image'])) {
-                $queryBuilder->leftJoin('advert.image', 'img')
-                    ->addSelect('img');
-            }
-
-            if (!empty($sets['__embedded']['categories'])) {
-                $queryBuilder->leftJoin('advert.categories', 'cat')
-                    ->addSelect('cat');
-            }
-        }
-
-        $query = $queryBuilder->getQuery();
+        $query = $this->getQueryAdvert($sets);
 
         // On défini le debut et la fin de l'intervalle de récupération
         $query->setFirstResult(($page - 1) * $nbAdvertPerPage)
@@ -74,6 +40,16 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
      * @return Array of Advert (Array)
      */
     public function getArrayAdverts($sets = null)
+    {
+        $query = $this->getQueryAdvert($sets);
+        return $query->getArrayResult();
+    }
+
+    /**
+     * Construit et returne la requête de récupération des annonces
+     * @return \Doctrine\ORM\Query
+     */
+    public function getQueryAdvert($sets = null)
     {
         $queryBuilder = $this->createQueryBuilder('advert')
         ->orderBy('advert.date', 'DESC');
@@ -109,7 +85,7 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
             }
         }
 
-        return $queryBuilder->getQuery()->getArrayResult();
+        return $queryBuilder->getQuery();
     }
 
     /**
